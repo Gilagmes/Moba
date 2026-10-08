@@ -1,0 +1,5 @@
+/* Aether Clash v382 — combat impact polish. */
+:root { --aether-combat-hud-version: "382"; --aether-impact-version: "382"; }
+
+/* v383 — ability telegraph & impact layer */
+.aether-ability-flash{filter:drop-shadow(0 0 12px currentColor)}

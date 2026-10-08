@@ -1,0 +1,12 @@
+/* Aether Clash v3.8.5 — targeting & teamfight readability */
+:root{--target-blue:#5fe6ff;--target-red:#ff6678;--target-gold:#ffd45d}
+.target-portraits button{transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}
+.target-portraits button.selected{transform:translateY(-1px) scale(1.04)}
+#game-shell.combat-focus .target-hud{box-shadow:0 0 0 1px #ff667855,0 8px 28px #0008}
+@media (max-width:700px){#game-shell.combat-focus .target-portraits{opacity:.96}.target-portraits{backdrop-filter:blur(7px)}}
+/* v3.8.6 — teamfight readability */
+.target-hud,.threat-hud,.control-hud{backdrop-filter:blur(10px);}
+@media (max-width:720px){
+  .target-hud{max-width:min(230px,44vw);}
+  .target-hud small,.threat-hud small{font-size:9px;}
+}

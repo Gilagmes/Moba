@@ -1,0 +1,69 @@
+/* v142–v152 — combat clarity, compact mobile HUD, audit and touch controls */
+#layoutEditorBar{position:fixed;z-index:80;left:50%;top:max(8px,env(safe-area-inset-top));transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:8px 12px;background:#07171eee;border:1px solid #62e3f3;color:#dffaff;font:800 10px system-ui}#layoutEditorBar.hidden{display:none}#layoutEditorBar b{color:#72ecff}#layoutEditorBar button{padding:6px 12px;background:#16353f;color:#fff;border:1px solid #69ddec}.mobile-layout-edit #mobileControls{display:block!important;pointer-events:auto!important}.mobile-layout-edit .mobile-skills{outline:1px dashed #68dff188;background:#07182133}.mobile-layout-edit .mobile-skills button{pointer-events:auto!important;opacity:.9!important;display:block!important;touch-action:none!important}.mobile-layout-edit .mobile-skills button::after{display:none}.mobile-layout-edit .mobile-skills .layout-dragging{filter:brightness(1.55);z-index:20;box-shadow:0 0 24px #fff!important}.mobile-layout-edit #joystick{opacity:.2!important;pointer-events:none!important}
+#skillAimOverlay{display:none;position:fixed;inset:0;z-index:44;pointer-events:none;background:radial-gradient(circle at var(--aim-x) var(--aim-y),transparent 0 72px,#06121918 180px,#06121955 100%)}#skillAimOverlay.show{display:block}#skillAimOverlay i{position:absolute;left:var(--aim-x);top:var(--aim-y);width:var(--aim-l);height:5px;transform-origin:0 50%;transform:rotate(var(--aim-a));background:linear-gradient(90deg,#66e8ff88,#bff8ff);border-radius:5px;box-shadow:0 0 15px #63e9ff}#skillAimOverlay i::after{content:'';position:absolute;right:-8px;top:-7px;width:17px;height:17px;border:3px solid #bff8ff;border-radius:50%}#skillAimOverlay b{position:absolute;left:50%;top:19%;transform:translateX(-50%);padding:7px 12px;background:#07151ddd;border:1px solid #5cdae9;color:#bff8ff;font:900 10px system-ui;letter-spacing:.08em}#skillAimOverlay.cancel i{background:#ff6575;box-shadow:0 0 15px #ff5266}#skillAimOverlay.cancel b{border-color:#ff6575;color:#ff8290}.mobile-skills button.aiming{filter:brightness(1.45);box-shadow:0 0 25px var(--hero-accent)!important;transform:scale(.92)!important}.mobile-skills .attack-minion{right:3px!important;bottom:70px!important;width:34px!important;height:34px!important;font-size:13px!important;border-color:#9fd7a4!important;color:#b9efbd!important;background:#183323e8!important}.mobile-skills .attack::before{content:'ГЕРОЙ';position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);font-size:6px;color:#ffd98a}.mobile-skills .attack-minion::before{content:'ЦЕЛЬ';position:absolute;left:50%;bottom:-10px;transform:translateX(-50%);font-size:6px;color:#b9efbd}
+#auditResults{display:grid;gap:6px;max-height:55vh;overflow:auto}.audit-row{display:grid;gap:3px;padding:9px;border-left:3px solid #6d8790;background:#0b1b22}.audit-row b{font-size:9px;letter-spacing:.08em}.audit-row span{font-size:11px;color:#e7f3f5}.audit-row small{font-size:9px;color:#9db1b7}.audit-row.pass{border-color:#51df91}.audit-row.warn{border-color:#ffd05c}.audit-row.error{border-color:#ff6075}.audit-pass{color:#63e69b!important}.audit-warn{color:#ffd56a!important}.audit-error{color:#ff7182!important}
+.pacing-advice{display:grid;gap:6px;margin:10px 0;padding:10px;background:#07171ecc;border:1px solid #315866}.pacing-advice>b{color:#83eaff;font-size:11px}.pacing-advice article{display:grid;gap:3px;padding:8px;border-left:3px solid #6e8790;background:#0d2027}.pacing-advice article strong{font-size:10px;color:#e8f4f6}.pacing-advice article span{font-size:9px;color:#a9c0c6;line-height:1.4}.pacing-advice article.pass{border-color:#55df91}.pacing-advice article.warn{border-color:#ffd165}.pacing-advice article.error{border-color:#ff6075}.pacing-advice article.info{border-color:#68ccea}.coach-focus{display:block;margin-top:6px;padding:6px;border:1px solid #74d7ac;background:#102a25;color:#a8f4cf;font-weight:900}.coach-hud{position:fixed;right:12px;top:92px;z-index:24;min-width:180px;padding:8px 10px;background:#091b1bcc;border:1px solid #60cfa2;color:#b9f7da;pointer-events:none;box-shadow:0 3px 14px #0008}.coach-hud b,.coach-hud span{display:block;font-size:10px}.coach-hud span{margin-top:3px;color:#fff}.coach-hud i{display:block;height:3px;margin-top:6px;background:linear-gradient(90deg,#69e3ad var(--coach-progress),#27443d var(--coach-progress));transition:.25s}.coach-hud.done{border-color:#ffe074;color:#ffe99a}.coach-hud.failed{border-color:#ff6175;color:#ff9bab}.coach-hud.failed i{background:#7d2834}.target-hud{position:fixed;right:12px;top:180px;z-index:23;min-width:190px;padding:8px 10px;background:#08171edb;border:1px solid #ffd45d;color:#ffe89b;pointer-events:none;box-shadow:0 3px 14px #0008}.target-hud.hidden{display:none}.target-hud b,.target-hud span,.target-hud small,.target-hud em{display:block}.target-hud em{margin-top:5px;padding-top:4px;border-top:1px solid #ffffff22;color:#ffaf73;font-size:8px;font-style:normal;font-weight:900}.target-hud b{font-size:11px}.target-hud span,.target-hud small{font-size:9px;margin-top:3px}.target-hud i{display:block;height:4px;margin-top:5px;background:linear-gradient(90deg,#55e391 var(--target-hp),#4c2730 var(--target-hp))}.target-hud.out-of-range{border-color:#ff6478;color:#ff9ba8}.threat-hud{position:fixed;left:12px;top:220px;z-index:23;min-width:190px;padding:8px 10px;background:#08171edb;border:1px solid #65d9c3;color:#b9f5e9;pointer-events:none;box-shadow:0 3px 14px #0008}.threat-hud.hidden{display:none}.threat-hud b,.threat-hud span,.threat-hud small,.threat-hud em{display:block}.threat-hud b{font-size:10px}.threat-hud span,.threat-hud small,.threat-hud em{margin-top:3px;font-size:9px}.threat-hud em{font-style:normal;color:#ffd08b}.threat-hud[data-level=warn]{border-color:#ffc45d;color:#ffe3a3}.threat-hud[data-level=danger]{border-color:#ff536c;color:#ff9cac;animation:threatPulse .7s infinite alternate}@keyframes threatPulse{to{box-shadow:0 0 16px #ff405877}}@media(max-width:700px){.coach-hud{top:62px;right:6px;min-width:145px;padding:6px}.coach-hud b,.coach-hud span{font-size:8px}}.pacing-advice article button{margin-top:6px;padding:7px;background:#163b32;color:#8ff1b5;border:1px solid #54d98c;font-size:9px;font-weight:900}.team-draft-row{display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center;margin:7px 0;padding:8px;background:#0c2028}.team-draft-row b{font-size:10px;color:#7fe8ff}.team-draft-row select{padding:8px;background:#07171e;color:#fff;border:1px solid #426b78}.draft-warning{color:#ffd16a!important}.draft-ready{color:#72e7a2!important}#networkDuelPanel label{display:block;color:#bad0d7;font-size:11px}#networkDuelPanel input{width:100%;margin-top:7px;padding:10px;background:#07171e;color:#fff;border:1px solid #4b7885;text-transform:uppercase}.network-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.network-actions button{padding:10px!important;font-size:10px!important}#networkDuelStatus{padding:9px;border-left:3px solid #63e4ff;background:#10252d;color:#d4edf3!important}
+.mobile-skills{--hero-accent:#54dafa}
+.mobile-skills .utility{opacity:0;pointer-events:none;transform:scale(.55);transition:opacity .16s,transform .16s}
+.mobile-skills.expanded .utility{opacity:1;pointer-events:auto;transform:scale(1)}
+.mobile-skills .utility-toggle{left:-28px!important;bottom:2px!important;width:38px!important;height:38px!important;border-color:#82a8b4!important;color:#cce8ef!important;background:#0b2029ee!important;font-size:12px!important}
+.mobile-skills.expanded .utility-toggle{border-color:#ffd66b!important;color:#ffd66b!important}
+.mobile-skills [data-skill=Q]{border-color:var(--hero-accent)!important;box-shadow:inset 0 -5px #ffffff18,0 0 12px color-mix(in srgb,var(--hero-accent) 45%,transparent)}
+.mobile-skills [data-skill=W]{border-color:#75e8ae!important;border-radius:14px!important;background:#123c32e8!important}
+.mobile-skills [data-skill=E]{border-color:#a985ff!important;transform:rotate(45deg)}
+.mobile-skills [data-skill=E]::first-letter{transform:rotate(-45deg)}
+.mobile-skills [data-skill=R]{border-width:3px!important;box-shadow:0 0 18px #ffd25b88,inset 0 0 16px #ff9d2744}
+.mobile-skills button[data-ability]::after{content:attr(data-ability);position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);font-size:7px;white-space:nowrap;color:#d8edf2;text-shadow:0 1px 3px #000}
+.mobile-skills [data-skill=E][data-ability]::after{transform:translateX(-50%) rotate(-45deg);bottom:-17px}
+@media(pointer:coarse),(max-width:800px){.mobile-skills{width:210px;height:150px;transform:scale(var(--mobile-hud-scale,.78))!important;opacity:var(--mobile-hud-opacity,.92)}#joystick{opacity:var(--mobile-hud-opacity,.92)}body[data-joystick-mode=floating] #joystick:not(.floating-active){opacity:.22}body[data-joystick-mode=floating] #joystick.floating-active{opacity:var(--mobile-hud-opacity,.92)}.mobile-skills:not(.expanded) .utility{display:block}.mobile-skills .summoner{top:-12px}.mobile-skills .awakening{top:-22px}}
+.impact-flash{animation:impactFlash .1s linear}@keyframes impactFlash{50%{filter:brightness(1.18) saturate(1.2)}}
+
+.coach-hud.hidden{display:none}@media(max-width:700px){.target-hud{top:122px;right:6px;min-width:150px;padding:6px}.target-hud b{font-size:9px}.target-hud span,.target-hud small{font-size:8px}.threat-hud{left:6px;top:122px;min-width:150px;padding:6px}.threat-hud b{font-size:9px}.threat-hud span,.threat-hud small,.threat-hud em{font-size:8px}}body.reduced-motion .threat-hud{animation:none!important}
+.control-hud{position:fixed;left:50%;top:108px;transform:translateX(-50%);z-index:24;min-width:150px;padding:7px 14px;border:1px solid #77dcff;background:#08141ee8;color:#bdefff;text-align:center;font-size:11px;font-weight:1000;letter-spacing:.08em;pointer-events:none;box-shadow:0 4px 18px #0009}
+.control-hud.hidden{display:none}.control-hud.stun{border-color:#ffe26d;color:#fff0a0;animation:controlHudPulse .55s ease-in-out infinite alternate}.control-hud.slow{border-color:#64d9ff;color:#a9ecff}.control-hud small{display:block;margin-top:2px;font-size:8px;color:#dcefff;letter-spacing:.03em}
+@keyframes controlHudPulse{to{box-shadow:0 0 24px #ffd85d88,0 4px 18px #0009}}
+@media(max-width:700px){.control-hud{top:76px;min-width:125px;padding:5px 10px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){.control-hud.stun{animation:none}}
+.control-hud small.queued{color:#ffe17a;text-shadow:0 0 8px #ffbf38;font-size:9px}
+
+/* v283 — touch HUD density: reserve the battlefield centre for play */
+@media (pointer:coarse) and (max-width:900px){
+  .coach-hud{display:none!important}
+  .target-hud,.threat-hud{top:130px;min-width:0;width:auto;max-width:43vw;padding:5px 8px;background:#06141ee8;box-shadow:0 2px 8px #0009}
+  .target-hud{right:6px}.threat-hud{left:6px}
+  .target-hud b,.threat-hud b{font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .target-hud span,.target-hud small,.target-hud em,.target-hud i,
+  .threat-hud span,.threat-hud small,.threat-hud em{display:none!important}
+  #game-shell.combat-focus .target-hud{display:none!important}
+  #killfeed{top:164px!important;right:6px!important;width:min(46vw,180px)!important;transform:none!important}
+  #killfeed .feed{padding:5px 7px;margin-bottom:4px;font-size:8px;line-height:1.25}
+  #killfeed .feed:nth-child(n+3){display:none}
+  #announcer{top:17%;width:min(82vw,340px);padding:5px 9px;font-size:17px;line-height:1.1;white-space:normal;text-align:center}
+  .tutorial{top:148px;min-width:0;width:min(78vw,300px);padding:7px 34px 7px 9px}
+  .tutorial b{font-size:8px}.tutorial p{font-size:9px;line-height:1.25}
+}
+
+/* v285 — player-first lobby: diagnostics live behind an explicit lab toggle */
+#start .dev-option{display:none!important}
+#start.developer-tools-visible label.dev-option{display:inline-flex!important}
+#start.developer-tools-visible button.dev-option{display:inline-block!important}
+#toggleDeveloperTools[aria-expanded=true]{border-color:#ffca68;background:#2e2517;color:#ffe1a0}
+@media(pointer:coarse) and (orientation:portrait){#toggleDeveloperTools{order:90;width:min(86vw,320px)}}
+
+/* v286 — progressive disclosure for secondary match setup */
+#start .advanced-option{display:none!important}
+#start.advanced-options-visible label.advanced-option{display:inline-flex!important}
+#toggleAdvancedOptions[aria-expanded=true]{border-color:#75dced;background:#15323b;color:#c8f7ff}
+@media(pointer:coarse) and (orientation:portrait){#toggleAdvancedOptions{order:89;width:min(86vw,320px)}}
+
+/* v306 — tutorial owns the transient mobile information lane */
+@media(pointer:coarse) and (max-width:900px){
+  #game-shell.tutorial-active #killfeed{top:218px!important}
+  #game-shell.tutorial-active .target-hud{display:none!important}
+}
+
+/* v310 — progression hub disclosure */
+#start .meta-option{display:none!important}
+#start.meta-options-visible button.meta-option{display:inline-block!important}
+#toggleMetaOptions[aria-expanded=true]{border-color:#d194ff;background:#281b35;color:#efceff}
+@media(pointer:coarse) and (orientation:portrait){#toggleMetaOptions{grid-column:1/-1;width:100%;min-height:40px}}

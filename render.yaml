@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: aether-clash
+    runtime: static
+    buildCommand: echo "Static Aether Clash build"
+    staticPublishPath: .
+    headers:
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

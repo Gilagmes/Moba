@@ -1,0 +1,32 @@
+/* v325+ — Mobile Combat Focus and player-first lobby hierarchy */
+.match-options .tutorial-course{display:none}
+#start.tutorial-courses-visible .match-options .tutorial-course{display:block}
+#toggleTutorialCourses{border-color:#4d8290;color:#bfeef5;background:#102832}
+#toggleModeCatalog{padding:9px 13px;font-size:11px;border-color:#426875;color:#b9dce4;background:#102832;box-shadow:none;clip-path:none}
+#start.tutorial-courses-visible #toggleTutorialCourses{border-color:#ffd36b;color:#ffe6a0;background:#302711}
+@media(max-width:700px){#toggleTutorialCourses,#toggleModeCatalog{grid-column:1/-1;min-height:38px}.match-options .tutorial-course{min-height:38px}}
+
+@media (pointer:coarse) and (max-width:900px){
+  /* Keep low-health urgency at the perimeter, below readable controls and HUD. */
+  #game-shell.critical-health::after{box-shadow:inset 0 0 58px 12px rgba(210,22,48,.2);animation-name:criticalHealthPulseMobile}
+  /* Routine contact is conveyed by world bars; reserve a chip for real pressure. */
+  .threat-hud[data-level="safe"]{display:none!important}
+  .threat-hud[data-level="warn"]{top:126px;left:6px;max-width:38vw;border-color:#ffc45d;background:#241b0dde}
+  .threat-hud[data-level="danger"]{top:126px;left:6px;max-width:46vw;border-width:2px;background:#2a0c14e8}
+  /* Never let target analysis compete with an urgent survival warning. */
+  #game-shell.combat-focus .target-hud{display:none!important}
+  #game-shell.combat-focus #killfeed{opacity:.35}
+  #game-shell.combat-focus #announcer{opacity:0!important;animation:none!important}
+  #game-shell.announcement-active:not(.combat-focus) #toast{opacity:0!important;pointer-events:none}
+  /* The utility drawer stays a secondary cluster rather than another primary skill row. */
+  .mobile-skills .utility{visibility:hidden}
+  .mobile-skills.expanded .utility,.mobile-layout-edit .mobile-skills .utility{visibility:visible}
+  .mobile-skills .utility-toggle{z-index:18}
+}
+@keyframes criticalHealthPulseMobile{to{box-shadow:inset 0 0 72px 18px rgba(255,38,62,.3)}}
+@media (pointer:coarse) and (prefers-reduced-motion:reduce){#game-shell.critical-health::after{animation:none;box-shadow:inset 0 0 58px 12px rgba(210,22,48,.22)}}
+@media (pointer:coarse) and (max-height:600px){
+  .target-hud,.threat-hud{top:94px!important}
+  #killfeed{top:124px!important}
+  .control-hud{top:55px!important}
+}

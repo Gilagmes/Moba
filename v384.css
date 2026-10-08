@@ -1,0 +1,4 @@
+/* Aether Clash v3.8.4 — combat readability release. */
+:root{--aether-combat-readability-version:"384";}
+/* Status chips are canvas-rendered; this layer reserves no extra HUD space. */
+@media (prefers-reduced-motion:reduce){:root{--aether-combat-readability-motion:reduced}}

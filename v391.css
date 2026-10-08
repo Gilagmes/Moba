@@ -1,0 +1,12 @@
+/* Aether Clash v3.8.7 — macro readability */
+.macro-minimap{pointer-events:none}
+
+/* v388 Objective tracker */
+.objective-tracker-note{letter-spacing:.04em}
+@media(max-width:520px){.objective-tracker-note{font-size:10px}}
+
+/* v3.8.9 — Smart Ping & Team Communication */
+.ping-wheel{backdrop-filter:blur(12px);}
+
+/* v3.9.1 — Ward & Vision Gameplay */
+.ward-vision-note{letter-spacing:.05em}

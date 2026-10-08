@@ -1,0 +1,4 @@
+/* v337 — readable radial cooldown feedback */
+.mobile-skills button.cooling::before{content:'';position:absolute;inset:2px;border-radius:inherit;background:conic-gradient(from -90deg,rgba(2,8,13,.78) 0 var(--cooldown-angle),transparent var(--cooldown-angle) 360deg);pointer-events:none}
+.mobile-skills button.cooling{font-variant-numeric:tabular-nums;text-shadow:0 1px 4px #000,0 0 5px #000}
+@media(prefers-reduced-motion:reduce){.mobile-skills button.cooling::before{transition:none}}
