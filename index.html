@@ -11,19 +11,21 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="style.css?v396" />
-  <link rel="stylesheet" href="v100.css?v396" />
-  <link rel="stylesheet" href="v142.css?v396" />
-  <link rel="stylesheet" href="v325.css?v396" />
-  <link rel="stylesheet" href="v337.css?v396" />
-  <link rel="stylesheet" href="v343.css?v396" />
-  <link rel="stylesheet" href="v388.css?v396" />
-  <link rel="stylesheet" href="v396.css?v396" />
-  <link rel="stylesheet" href="v384.css?v396" />
+  <link rel="stylesheet" href="style.css?v455" />
+  <link rel="stylesheet" href="v100.css?v455" />
+  <link rel="stylesheet" href="v142.css?v455" />
+  <link rel="stylesheet" href="v325.css?v455" />
+  <link rel="stylesheet" href="v337.css?v455" />
+  <link rel="stylesheet" href="v343.css?v455" />
+  <link rel="stylesheet" href="v388.css?v455" />
+  <link rel="stylesheet" href="v396.css?v455" />
+  <link rel="stylesheet" href="v384.css?v455" />
+  <link rel="stylesheet" href="v455.css?v455" />
 </head>
 <body>
   <main id="game-shell">
     <canvas id="game" tabindex="0" role="application" aria-label="Игровое поле Aether Clash. Esc — пауза, Tab — таблица команд."></canvas>
+    <button id="mobileLaunch" type="button" aria-label="Начать матч с текущими настройками"><strong>НАЧАТЬ БОЙ</strong><small>Быстрый запуск</small></button>
     <aside id="coachHud" class="coach-hud hidden" aria-label="Прогресс фокуса тренера"></aside>
     <aside id="targetHud" class="target-hud hidden" aria-label="Информация о выбранной цели"></aside>
     <aside id="threatHud" class="threat-hud hidden" aria-label="Оценка входящей угрозы"></aside><nav id="targetPortraits" class="target-portraits hidden" aria-label="Быстрый выбор видимой цели"></nav><aside id="controlHud" class="control-hud hidden" role="status" aria-live="off" aria-label="Состояние контроля"></aside>
@@ -101,6 +103,10 @@
       <label><input id="hapticsEnabled" type="checkbox" checked> Виброотклик на телефоне</label>
       <label><input id="reducedMotion" type="checkbox"> Уменьшить движение и вспышки</label>
       <label><input id="highContrast" type="checkbox"> Высокая контрастность целей</label>
+      <label><input id="model3d" type="checkbox" checked> 3D-модели (WebGL)</label>
+      <label><input id="persp" type="checkbox" checked> Перспективная 3D-камера</label>
+      <label>Размер моделей <select id="modelScale"><option value="100">Обычный</option><option value="120" selected>Крупнее</option><option value="140">Крупные</option></select></label>
+      <label>Угол камеры <select id="camTilt"><option value="48">Ниже (больше перспективы)</option><option value="56" selected>Стандарт</option><option value="64">Выше (ближе к виду сверху)</option></select></label>
       <label><input id="autoQuality" type="checkbox" checked> Автонастройка производительности</label>
       <label>Цветовой режим <select id="colorMode"><option value="normal">Обычный</option><option value="deuteranopia">Красный → оранжевый</option><option value="tritanopia">Синий → бирюзовый</option><option value="mono">Монохром + контуры</option></select></label>
       <details class="keybind-settings"><summary>Управление с клавиатуры</summary><div id="keybindList"></div><div class="keybind-presets"><button id="actionKeybinds">WASD + QERT</button><button id="mobaKeybinds">СТРЕЛКИ + QWER</button><button id="resetKeybinds">Сбросить клавиши</button></div></details>
@@ -114,6 +120,14 @@
       <header><b>МАГАЗИН БАЗЫ</b><span id="shopGold" aria-live="polite">◈ 0</span><button id="closeShop">×</button></header>
       <p>Покупки доступны рядом с синей базой</p>
       <div id="shopAdvice"></div><nav id="shopFilters" aria-label="Категории магазина"><button type="button" data-filter="all" class="active">ВСЕ</button><button type="button" data-filter="recommended">РЕКОМЕНДОВАНО</button><button type="button" data-filter="attack">АТАКА</button><button type="button" data-filter="defense">ЗАЩИТА</button><button type="button" data-filter="mobility">ТЕМП</button></nav><button id="quickBuy" type="button"><strong>БЫСТРАЯ ПОКУПКА</strong><small>Следующий предмет рекомендуемой сборки</small></button><section id="shopInventory" aria-label="Инвентарь и продажа предметов"></section>
+      <section id="shopComponents" class="shop-components" aria-label="Компоненты"><h4>КОМПОНЕНТЫ · нужны для сборки предметов</h4>
+        <button type="button" data-component="sword"><strong>Меч искры</strong><small>180 золота · +7 урона · <span class="comp-have">0</span> в запасе</small></button>
+        <button type="button" data-component="guard"><strong>Стальная пластина</strong><small>160 золота · +10 брони · <span class="comp-have">0</span> в запасе</small></button>
+        <button type="button" data-component="crystal"><strong>Эфирный осколок</strong><small>220 золота · +15 сопротивления · <span class="comp-have">0</span> в запасе</small></button>
+        <button type="button" data-component="bootsCore"><strong>Лёгкие сапоги</strong><small>150 золота · +20 скорости · <span class="comp-have">0</span> в запасе</small></button>
+        <button type="button" data-component="fangCore"><strong>Коготь охотника</strong><small>240 золота · +8% вампиризма · <span class="comp-have">0</span> в запасе</small></button>
+        <button type="button" data-component="lens"><strong>Призма фокуса</strong><small>260 золота · +6% ускорения · <span class="comp-have">0</span> в запасе</small></button>
+      </section>
       <button data-item="blade"><strong>Клинок шторма</strong><small>300 золота · урон, пробивание · каждый 4-й удар усилен</small></button>
       <button data-item="boots"><strong>Сапоги ветра</strong><small>250 золота · +35 скорости · вне боя ещё +25</small></button>
       <button data-item="core"><strong>Эфирное ядро</strong><small>400 золота · энергия, сопротивление · эфирный резерв</small></button>
@@ -136,7 +150,26 @@
     </div>
     <div id="toast" role="status" aria-live="polite"></div>
   </main>
-  <script src="game.js?v396"></script>
+  <script src="js/00-boot-network-tutorial.js?v455"></script>
+  <script src="js/01-world-modes-state.js?v455"></script>
+  <script src="js/02-profile-saves.js?v455"></script>
+  <script src="js/03-achievements-daily-history.js?v455"></script>
+  <script src="js/04-audio-feedback-input.js?v455"></script>
+  <script src="js/05-shop-pause-spells.js?v455"></script>
+  <script src="js/06-heroes-runes.js?v455"></script>
+  <script src="js/07-menu-controls.js?v455"></script>
+  <script src="js/08-talents-director-structures.js?v455"></script>
+  <script src="js/09-combat-skills.js?v455"></script>
+  <script src="js/10-match-flow-ai.js?v455"></script>
+  <script src="js/11-mode-systems.js?v455"></script>
+  <script src="js/12-update-vision-map.js?v455"></script>
+  <script src="js/13-character-render.js?v455"></script>
+  <script src="js/14-entities-hud-render.js?v455"></script>
+  <script src="js/14b-visual-polish.js?v455"></script>
+  <script src="js/14c-gl3d.js?v455"></script>
+  <script src="js/14d-gl3d-models.js?v455"></script>
+  <script src="js/15-boot.js?v455"></script>
+  <script src="js/16-quickstart.js?v455"></script>
   <script>
   (()=>{const data={guardian:{name:'СТРАЖ',role:'ВОИН · ВЫЖИВАЕМОСТЬ',copy:'Держит фронт, принимает удар и создаёт пространство для команды.',tags:['ТАНК','КОНТРОЛЬ','ФРОНТ'],art:'assets/guardian.webp'},phantom:{name:'ФАНТОМ',role:'УБИЙЦА · МОБИЛЬНОСТЬ',copy:'Врывается через боковой маршрут, быстро добивает и выходит из опасной зоны.',tags:['ВРЫВ','КРИТ','УКЛОНЕНИЕ'],art:'assets/phantom.webp'},oracle:{name:'ОРАКУЛ',role:'МАГ · ДАЛЬНИЙ УРОН',copy:'Контролирует пространство дальними заклинаниями и наказывает скучившихся врагов.',tags:['МАГ','ЗОНА','ДАЛЬНОСТЬ'],art:'assets/oracle.webp'},tempest:{name:'БУРЕВЕСТНИК',role:'СТРЕЛОК · ОБЛАСТЬ',copy:'Держит дистанцию, ускоряет темп боя и превращает группы целей в безопасную добычу.',tags:['CARRY','АОЕ','ТЕМП'],art:'assets/tempest.webp'},seraph:{name:'СЕРАФИМ',role:'ПОДДЕРЖКА · ЛЕЧЕНИЕ',copy:'Поддерживает фронт, лечит союзников и меняет исход долгих командных сражений.',tags:['SUPPORT','ХИЛ','СПАСЕНИЕ'],art:'assets/seraph.webp'},archon:{name:'АРХОНТ',role:'ВОИН · КОНТРОЛЬ ВРЕМЕНИ',copy:'Замедляет критические моменты и создаёт команде окно для решающего столкновения.',tags:['BRUISER','КОНТРОЛЬ','ULT'],art:'assets/archon.webp'},warden:{name:'ВЕКТОР',role:'ВОИН · ГРАВИТАЦИЯ',copy:'Сжимает пространство вокруг цели и удерживает противника там, где команде удобно сражаться.',tags:['ТАНК','ЗОНА','ГРАВИТАЦИЯ'],art:'assets/warden.webp'},forge:{name:'КУЗНЕЦ',role:'БОЕЦ · РУНЫ',copy:'Наращивает давление раскалёнными рунами и превращает узкие проходы в смертельные зоны.',tags:['FIGHTER','РУНЫ','ОСАДА'],art:'assets/forgeborn.webp'},lumen:{name:'ЛЮМЕН',role:'МАГ · ПРИЗМЫ',copy:'Расщепляет бой световыми линиями и наказывает врагов за неверное позиционирование.',tags:['МАГ','ПРИЗМЫ','BURST'],art:'assets/lumen.webp'}};
   const img=document.getElementById('startHeroArt'),name=document.getElementById('startHeroName'),role=document.getElementById('startHeroRole'),copy=document.getElementById('startHeroCopy'),stats=document.getElementById('startHeroStats');
@@ -145,6 +178,6 @@
   paint(document.querySelector('.hero-card.selected')?.dataset.hero||'guardian');
   })();
   </script>
-  <script>if('serviceWorker' in navigator)window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./sw.js?v396');reg.update();reg.addEventListener('updatefound',()=>{const worker=reg.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)showToast('Обновление загружено · применится после перезапуска')})})}catch{}});</script>
+  <script>if('serviceWorker' in navigator)window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./sw.js?v455');reg.update();reg.addEventListener('updatefound',()=>{const worker=reg.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)showToast('Обновление загружено · применится после перезапуска')})})}catch{}});</script>
 </body>
 </html>

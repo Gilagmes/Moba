@@ -1,2 +1,17 @@
-/* Aether Clash v3.9.6 — Siege / Push readability */
+/* Aether Clash v4.0.0 — Siege / Push readability + embedded preview launch */
 .aether-siege-badge{font:800 10px system-ui;letter-spacing:.04em}
+#mobileLaunch[hidden]{display:none!important}
+#mobileLaunch:not([hidden]){position:fixed;z-index:135;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;gap:2px;min-width:190px;padding:12px 22px;border:1px solid #63dcf5;border-radius:10px;background:#08202bea;color:#e8fbff;box-shadow:0 8px 28px #000b,0 0 18px #4bdcff44;font:900 14px system-ui}
+#mobileLaunch small{font:700 9px system-ui;color:#8fc8d2}
+
+/* v410: карточки магазина не сжимаются в сетке с ограниченной высотой — прокрутка вместо наложения */
+#shop{grid-auto-rows:min-content;align-content:start}
+#shop>button[data-item]{min-height:max-content;overflow:hidden}
+#shop>button[data-item] small{display:block}
+#shop .shop-components button,#shop #shopInventory,#shop #shopAdvice{flex-shrink:0}
+
+/* v413: на ПК с мышью виртуальный джойстик не нужен (WASD / ПКМ) */
+@media (hover:hover) and (pointer:fine) and (min-width:801px){#joystick{display:none!important}}
+
+/* v415: кнопка «Продолжить вертикально» не работала: правило body.match-active-ui #rotateHint{display:flex} было специфичнее .dismissed */
+body.match-active-ui #rotateHint.dismissed,#rotateHint.dismissed{display:none!important}

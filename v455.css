@@ -1,0 +1,78 @@
+/* v417: чистая раскладка стартового меню.
+   Десктоп: слева превью героя (липкое), справа заголовок, герои, настройки и кнопка боя (липкая внизу).
+   Телефон в альбомной ориентации: без большого превью, герои и настройки доступны сразу. */
+@media (min-width:900px) and (min-height:520px){
+  #start.panel{display:grid!important;grid-auto-rows:max-content!important;grid-template-rows:none!important;grid-template-columns:minmax(300px,400px) minmax(0,720px);justify-content:center;align-content:start;column-gap:36px;row-gap:14px;padding:64px 28px 40px!important;overflow-y:auto!important;justify-content:center!important;align-items:start!important}
+  #start>*{grid-column:2;min-width:0;margin:0!important;max-width:none!important}
+  #start>.profile-badge{position:fixed!important;left:16px;top:14px;grid-column:auto;z-index:5}
+  #start>.start-visual{grid-column:1;grid-row:1/span 12;position:sticky!important;top:20px;right:auto!important;left:auto!important;width:100%!important;height:min(calc(100vh - 110px),560px)!important;min-height:300px;opacity:1!important;align-self:start}
+  #start>.start-visual img,#startHeroArt{width:100%!important;height:100%!important;object-fit:cover}
+  #start .start-copy{display:flex!important;flex-direction:column;align-items:flex-start;gap:8px;text-align:left}
+  #start .start-copy .brand{font-size:15px;margin:0}
+  #start .start-copy h1{font-size:clamp(26px,3vw,40px)!important;line-height:1.05;margin:0!important;text-align:left;letter-spacing:.01em}
+  #start .start-copy p{margin:0;max-width:560px;font-size:13px;line-height:1.45;text-align:left}
+  #start .start-progress{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 6px}
+  #start .start-progress span{padding:5px 10px;border:1px solid #2a4a55;border-radius:999px;background:#0a1d25aa;font-size:10px;letter-spacing:.06em;color:#a9c3ca}
+  #start .start-progress b{color:#fff;margin-right:4px}
+  #start .heroes{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(118px,1fr))!important;gap:8px!important;width:100%;justify-content:stretch!important;margin:4px 0 0!important}
+  #start .heroes .hero-card{width:auto!important;height:112px!important;min-width:0}
+  #start>#play{position:sticky;bottom:14px;z-index:6;width:min(100%,420px);justify-self:center;box-shadow:0 10px 30px #000a}
+  #start>#mobileLaunch,#mobileLaunch{display:none!important}
+  #start>.controls{margin-top:6px}
+}
+/* телефон, альбом */
+@media (max-height:519px) and (orientation:landscape){
+  #start>.start-visual{display:none!important}
+  #start .start-copy h1,#start .start-copy p,#start .start-copy .brand,#start .start-copy .start-progress{display:none!important}
+}
+
+@media (min-width:900px) and (min-height:520px){
+  #start>.start-visual{border-radius:22px;overflow:hidden;box-shadow:0 18px 50px #0008}
+  #start>.start-visual::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,#02090cee 100%);z-index:1;pointer-events:none}
+  #start .start-visual-info{position:absolute!important;left:18px;right:18px;bottom:16px;z-index:3;display:grid;gap:6px}
+  #start .start-visual-role{font-size:10px;letter-spacing:.18em;color:#8fe6f4;font-weight:800}
+  #start .start-visual-name{display:block;font-size:clamp(26px,3vw,38px);line-height:1;font-weight:950;letter-spacing:.04em;color:#f2fbff;text-shadow:0 4px 18px #000a}
+  #start .start-visual-copy{display:block;font-size:12px;line-height:1.4;color:#e1f4f8bf}
+  #start .start-visual-stats{display:flex;gap:6px;flex-wrap:wrap}
+  #start .start-visual-stats span{padding:4px 8px;border:1px solid #ade7f024;border-radius:999px;background:#05111588;font-size:9px;font-weight:800;color:#e5f9fdd0}
+  #start>*{width:100%}
+  #start>.profile-badge{width:auto}
+  #start>#play{width:min(100%,420px);box-shadow:0 0 0 10px #051119d9,0 12px 30px #000a!important;border-radius:6px}
+  #start>.hero-details,#start>.match-options,#start>.draft-preview,#start>.controls{max-width:100%;min-height:min-content}
+  #start.panel{padding-bottom:0!important}
+  #start>.controls{margin-bottom:110px!important}
+}
+
+/* общие правила для всех размеров */
+#start .start-progress{display:flex;flex-wrap:wrap;gap:6px;justify-content:inherit}
+#start .start-progress span{padding:4px 9px;border:1px solid #2a4a55;border-radius:999px;background:#0a1d25aa;font-size:10px;letter-spacing:.05em;color:#a9c3ca}
+#start .start-progress b{color:#fff;margin-right:3px}
+/* кнопка быстрого старта: внизу экрана, не по центру */
+@media (max-width:899px),(max-height:519px){
+  #mobileLaunch:not([hidden]){left:50%!important;top:auto!important;bottom:calc(12px + env(safe-area-inset-bottom,0px))!important;transform:translateX(-50%)!important;height:auto!important;width:min(320px,calc(100vw - 24px));box-shadow:0 0 0 8px #051119d9,0 8px 28px #000b}
+  #start.panel{padding-bottom:96px!important}
+}
+@media (max-width:899px) and (orientation:portrait){
+  #start .start-copy h1{font-size:clamp(22px,7.4vw,32px)!important;line-height:1.05}
+  #start .start-copy p{font-size:13px}
+}
+@media (max-height:519px) and (orientation:landscape){
+  #mobileLaunch:not([hidden]){left:auto!important;right:12px;transform:none!important;width:190px}
+}
+
+/* v418: на экране итогов (телефон, альбом) заголовок и статистика матча не скрываются */
+@media (max-height:519px) and (orientation:landscape){
+  #start.result-screen .start-copy h1,#start.result-screen .start-copy p{display:block!important;text-align:left}
+  #start.result-screen .start-eyebrow{display:none!important}
+  #start.result-screen .start-copy h1{font-size:22px!important;margin:0 0 4px!important}
+  #start.result-screen .start-copy p{font-size:11px!important;line-height:1.35;margin:0!important;max-width:none!important}
+}
+
+/* v418: на экране итогов выбор героя и настройки матча скрыты на всех экранах ("Сыграть ещё" перезагружает меню) */
+#start.result-screen .heroes,#start.result-screen .match-options{display:none!important}
+
+/* v420: липкая кнопка боя не закрывает последний блок меню */
+@media (min-width:900px) and (min-height:520px){#start.panel{padding-bottom:96px!important}}
+
+/* v438 visual grade: GPU filter on the game canvas, toggled by JS (off on low quality / reduced motion) */
+canvas.vfx-grade{filter:saturate(1.28) contrast(1.07) brightness(1.1)}

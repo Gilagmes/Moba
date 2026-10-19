@@ -81,3 +81,37 @@
   .panel .match-options button{width:100%;min-height:38px;padding:8px 5px;font-size:9px}
   #toggleAdvancedOptions,#toggleDeveloperTools{grid-column:1/-1}
 }
+
+/* v407: shop components */
+.shop-components{display:grid;gap:6px;margin:8px 0}.shop-components h4{margin:0;font:800 10px system-ui;color:#9fc3cb;letter-spacing:.06em}.shop-components button{text-align:left}.shop-components button.unaffordable{opacity:.55}
+/* v408: shop components layout */
+#shop .shop-components{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin:6px 0}
+#shop .shop-components h4{grid-column:1/-1}
+#shop .shop-components button{background:linear-gradient(#0d2630,#0a1b23);color:#e6f3f6;border:1px solid #2f6070;border-radius:8px;padding:8px 10px;min-height:44px}
+#shop .shop-components button strong{display:block;font:800 12px system-ui;color:#fff}
+#shop .shop-components button small{display:block;font:600 10px system-ui;color:#f0c76a;margin-top:2px}
+#shop .shop-components button.unaffordable{opacity:.5}
+/* v408: filter chips were squeezed to a 4px row on short landscape screens */
+#shop #shopFilters{min-height:34px;flex-shrink:0;align-items:center}
+@media (max-height:420px){#shop #shopFilters{min-height:30px}}
+/* v409: tall start/result screen was centred with overflow, so its top (ПОБЕДА title, first report lines) sat above the scroll origin and was unreachable */
+#start{justify-content:flex-start!important}
+#start>:first-child{margin-top:auto}
+#start>:last-child{margin-bottom:auto}
+/* v409: on portrait phones start-visual/start-copy took their max-content width (512px / 1048px) and overflowed both sides */
+@media (max-width:700px){#start>.start-visual,#start>.start-copy{width:100%;max-width:100%;min-width:0;box-sizing:border-box}#start .start-copy h1{font-size:clamp(26px,9vw,44px);overflow-wrap:break-word}#start .start-visual-info{max-width:100%;box-sizing:border-box}}
+@media (max-width:700px){#startHeroArt{max-width:100%;height:auto}#start .heroes{box-sizing:border-box;width:calc(100% - 16px);max-width:calc(100% - 16px)}}
+
+/* v409: portrait phones - styled hero card (rules reused from v380.css, scoped to phones) */
+@media (max-width:700px){
+.start-visual{position:relative;width:100%;height:230px;min-height:0;margin:8px 0 12px;border:1px solid rgba(170,231,240,.16);border-radius:22px;overflow:hidden;background:rgba(2,10,14,.42);box-shadow:0 18px 50px rgba(0,0,0,.38);z-index:0}
+.start-visual::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 22%,rgba(2,9,12,.04) 38%,rgba(2,9,12,.88) 100%);z-index:1;pointer-events:none}
+.start-visual img,#startHeroArt{width:100%;height:100%;object-fit:cover;object-position:center 18%}
+.start-visual-info{position:absolute;left:14px;right:14px;bottom:12px;z-index:3;display:grid;gap:4px}
+.start-visual-role{font-size:10px;letter-spacing:.18em;color:#8fe6f4;font-weight:800}
+.start-visual-name{font-size:26px;line-height:.98;font-weight:950;letter-spacing:.04em;color:#f2fbff;text-shadow:0 4px 18px rgba(0,0,0,.65)}
+.start-visual-copy{font-size:11px;line-height:1.35;color:rgba(225,244,248,.78)}
+.start-visual-stats{display:flex;gap:6px;flex-wrap:wrap}
+.start-visual-stats span{padding:4px 7px;border:1px solid rgba(173,231,240,.14);border-radius:999px;background:rgba(5,17,21,.55);font-size:9px;font-weight:800;color:rgba(229,249,253,.82)}
+}
+@media (max-width:700px) and (orientation:portrait){#mobileLaunch:not([hidden]){top:auto;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%)}}

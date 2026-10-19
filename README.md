@@ -17,6 +17,114 @@ v3.9.1 превращает систему обзора из визуально�
 
 Оригинальный браузерный прототип MOBA 5×5 без внешних библиотек, чужого кода и защищённых игровых материалов.
 
+## v455 — размер моделей
+- Новая настройка «Размер моделей»: Обычный (100%), Крупнее (120%, по умолчанию), Крупные (140%). Масштабируются только 3D-модели персонажей и миньонов; хитбоксы, дальности и геймплей не меняются.
+- Подписи и полоски над моделями приподнимаются пропорционально размеру.
+
+## v454 — меньше шума в свалке
+- В перспективном режиме мелкие подписи ролей под ботами (ТАНК, УБИЙЦА, ПОДДЕРЖКА…) показываются только у выбранной цели: в плотной свалке они сливались с моделями и друг с другом. Имена и полоски здоровья остаются у всех.
+
+## v453 — единый направленный свет
+- Тени башен, ингибиторов, нексуса, монстров, скал и деревьев сдвинуты и вытянуты в ту же сторону, что и тени героев (вправо и вверх по карте), поэтому свет читается как идущий с одной стороны.
+
+## v452 — парящие искры эффектов
+- Типовые частицы эффектов (лечение, щит, рывок, мастерство, каст, улучшение и т.п.) в перспективном режиме получают парящий светящийся 3D-шарик, поднимающийся к концу жизни частицы; не более 110 на кадр, отключается на пониженном качестве.
+
+## v451 — объёмные снаряды
+- Выстрелы героев, миньонов и башен (`shot`, `minionShot`, `towerShot`) в перспективном режиме получили 3D-шар со свечением, хвост из трёх уменьшающихся шаров и тень на земле; 2D-след остаётся под ними.
+- Цвета берутся из прежней логики (башня белая/красная/оранжевая по силе, осадный миньон золотой).
+
+## v450 — регрессия по всем режимам и телефону
+- Проверены запуском все 25 режимов игры в перспективной камере (classic … expedition, training): ошибок страницы нет.
+- Проверен телефонный размер (844×390, тач, dpr 2): перспектива, модели, джойстик и кнопки на месте.
+- Код игры не менялся; обновлена только версия.
+
+## v449 — защита по скорости
+- Если при включённой автонастройке кадры падают ниже 30 FPS уже на сниженном качестве, перспективная камера автоматически отключается (возвращается лёгкая косая проекция), с подсказкой; включить её можно в настройках.
+
+## v448 — угол камеры
+- Новая настройка «Угол камеры»: Ниже (48°, больше перспективы), Стандарт (56°), Выше (64°, ближе к виду сверху). Сохраняется в настройках (`options.camTilt`) и применяется сразу; размер текстуры мира подстраивается автоматически.
+
+## v447 — стрелка к цели за краем экрана
+- В перспективном режиме стрелка-указатель на выбранную цель вне экрана считается по реальному экрану (а не по расширенной текстуре мира) и рисуется вертикальным слоем поверх.
+- Прогнан широкий тест ввода (Q/W/E/R/F/1-4/B/P/T/пробел, левый/правый клик, Alt-клик, touch-события): ошибок на странице нет.
+
+## v446 — выбор цели кликом по модели
+- В перспективном режиме цель выбирается не только по точке на земле, но и по экранной позиции тела модели (на высоте ~28), поэтому клик по голове или корпусу вражеского юнита попадает в него.
+- Радиус выбора прежний (60), движение и атака по правому клику не менялись.
+- Исправлена ошибка v439–v445: в `worldPoint` пропал пробел (`returnscrToWorld`), из-за чего левый клик (выбор цели, Alt-пинг, атака-движение) выбрасывал исключение.
+
+## v445 — вода реки
+- Вдоль русла реки (полоса от (1050,-100) до (1560,1900)) плывут блики и расходятся круги ряби — анимированные 3D-детали в перспективном режиме.
+- Русло по-прежнему нарисовано на земле, это визуальный слой без влияния на геймплей.
+
+## v444 — светлячки и пыльца
+- В перспективном режиме в воздухе парят светящиеся 3D-светлячки (тёплые и бирюзовые), мерцают и плавно дрейфуют; отключаются при «Меньше движения», выключенных частицах и пониженном качестве.
+
+## v443 — объёмные кусты
+- В перспективном режиме над нарисованными кустами растут 3D-пучки травы (три лезвия на пучок), качающиеся на ветру (учитывается «Меньше движения»).
+- Геймплей кустов не менялся: это чисто визуальный слой.
+
+## v442 — объёмные плиты под скалами и рощами
+- В перспективном режиме под каждой скалой и рощей стоит приподнятое каменное основание (скруглённая плита с верхней гранью), скалы и деревья стоят на нём.
+- Земля остаётся 2D-текстурой; следующий шаг к настоящему рельефу — стены лесов и русло реки.
+
+## v441 — глубина и порядок подписей
+- Дымка: дальние края карты и модели мягко уходят в тёмно-бирюзовый туман (в шейдерах земли и моделей), что усиливает ощущение глубины.
+- Подписи в свалке больше не накладываются друг на друга: перекрывающиеся имена раскладываются стопкой вверх.
+
+## v440 — вертикальные подписи и полоски
+- В перспективном режиме весь текст (имена, цифры урона, подписи) и полоски здоровья перехватываются во время отрисовки мира, пересчитываются через проекцию и рисуются вертикально поверх 3D-моделей, а не лежат наклонённо на земле.
+- Подписи слегка приподняты над моделью и масштабируются с перспективой.
+
+## v439 — перспективная 3D-камера
+- Вся 2D-карта со всеми эффектами, туманом и подписями рендерится в текстуру и кладётся на наклонную плоскость; модели стоят на ней в той же перспективе (камера ~56°, дистанция 1250).
+- Мышь, пинги, умения и клики переведены через обратную проекцию (`scrToWorld`, `worldToScr`), так что прицеливание попадает в точку на земле.
+- Настройка «Перспективная 3D-камера» (`options.persp`) отключает её и возвращает косую проекцию v438; без WebGL остаётся чистое 2D.
+- Честно: карта по-прежнему 2D-текстура на плоскости (не рельеф), подписи и полоски здоровья наклонены вместе с землёй. Производительность на реальной видеокарте не измерена: в тестовой среде без GPU кадр дороже.
+
+## v438 — 3D-графика в духе JUMP-стиля
+- Аддитивное свечение (шейдер материала 3): кристаллы, линзы, фонари и ядро нексуса светятся мягким ореолом.
+- Направленные тени под персонажами, лёгкое повышение насыщенности цвета (vibrance).
+- Нексус: знамёна на шестах с самоцветами, усиленное свечение; башни: боковые фонари.
+- Честно: это процедурное low-poly cel-shaded 3D поверх 2D-карты, не студийные модели.
+
+## v438 — детализация моделей и материалов
+- Шейдер: блики (specular) для металла (клинки, латы, шлемы, щиты, молот) и мягкий блик для кожи, затемнение у земли (fake AO по высоте). Материал задаётся `G3.mat` (0 матовый, 1 металл, 2 кожа) и кодируется в слоте emissive.
+- Модели: наручи и поножи, лямки и подсумки, пряжки, перья на шлеме Стража, румянец и ресницы у героинь, хвост пояса у мантий.
+
+## v436 — авторские 3D-модели персонажей
+- Новый модуль `js/14d-gl3d-models.js` и новые меши в `14c-gl3d.js`: суперэллипсоиды (скруглённые блоки, «таблетки», мягкие головы), клинок, огранённый кристалл, перо, плащ, рог.
+- Полноценный скелет: ноги и руки с коленями/локтями, таз, торс, шея, голова с глазами (белок, радужка, блик), бровями, носом, ртом, ушами.
+- Свой дизайн для каждого героя: Страж (рыцарь с гребнем, щитом, плащом), Варден (капюшон, гравитационные кольца и перчатка, рога), Фантом (капюшон, маска, шарфы, два кинжала), Оракул (мантия, длинные волосы, посох с орбом, орбиты), Архонт (латы, парящие кристаллы, скипетр), Люмен (хвосты, призматические крылья), Серафим (нимб, крылья, посох с крестом), Темпест (лук с тетивой и стрелой, колчан, хвост), Кузнец (кудри-пламя, очки, молот, горн за спиной). Миньоны: воин (копьё, круглый щит), маг (шляпа, посох), супер-рыцарь; осадная тележка осталась на прежней модели.
+- При любой ошибке построения модели персонаж рисуется прежней моделью v430 (`g3CharLegacy`).
+
+## v438 — поза при касте
+- При использовании способности (скачок кулдауна) свободная рука поднимается со светящимся шаром, корпус наклоняется вперёд (0,5 с). Работает для героя и ботов с таблицей `cd`.
+
+## v438 — дым
+- Башни с HP < 30% дымят над ядром; на руинах башен поднимается дым (`g3Smoke`). Отключается при низком качестве и при «Уменьшить движение».
+
+## v438 — гибель юнитов в 3D
+- Погибший юнит (герой, бот, миньон) не исчезает мгновенно: 0,55 с он белеет, заваливается назад и сжимается (`g3Corpses` в `js/14c-gl3d.js`). Отключается при «Уменьшить движение».
+
+## v438 — руины и ветер
+- Разрушенные башни теперь 3D-руины (обломки камня, тлеющий осколок ядра).
+- Деревья слегка раскачиваются на ветру.
+
+## v438 — доработка 3D-визуала
+- Наклон корпуса вперёд при беге и выпад при атаке; «выскакивание» юнита при появлении.
+- Уникальные детали со спины у героев: плащ Стража, полы плаща Фантома, крылья Серафа и Люмен, колчан Темпест, горн Кузнеца, плавающие кристаллы Архонта, гравитационное кольцо Варда, нимб Оракула.
+- Башня подсвечивает ядро белым при фокусе цели.
+- Предыдущий релиз: настоящие 3D-модели (WebGL), модуль `js/14c-gl3d.js`:
+
+- Новый модуль `js/14c-gl3d.js`: собственный WebGL-рендерер без внешних библиотек и ассетов. Процедурные low-poly модели с cel-shading (3 ступени света, rim-свет, контуры методом inverted hull), тени и командные кольца.
+- В 3D: все 9 героев, боты и разоритель (классы tank/assassin/mage/ranger/support/bruiser), миньоны (воин, маг, осадная тележка, супер), лесные монстры (голем, огнегрив, дракон, герольд, титан, слизь), башни (2 уровня), ингибиторы, нексус, камни и деревья карты. Анимации берутся из `charAnim` (шаг, взмах, вспышка при попадании, лицом к цели/по движению).
+- Карта, HUD, полосы здоровья и эффекты остаются 2D; 3D-слой композитится одним `drawImage` после героя и до тумана войны. Камера — косая проекция: земля 1:1 с 2D-картой.
+- Производительность: инстансинг (`ANGLE_instanced_arrays`), ~40 вызовов отрисовки за кадр независимо от числа деталей; при `qualityScale<1` отключаются контуры.
+- Безопасность: нет WebGL / потеря контекста / ошибка шейдера → автоматически рисуется старый 2D. Переключатель «3D-модели (WebGL)» в настройках (`options.model3d`).
+- Ограничение: модели процедурные (из примитивов), не студийные скульпты — честно ниже уровня авторских моделей JUMP: Assemble; следующий шаг — загрузка glTF-моделей.
+
 ## Запуск
 
 Откройте `index.html` или запустите локальный HTTP-сервер:
@@ -1662,3 +1770,128 @@ Added a lightweight smart-ping history linked to the battlefield and macro minim
 - Siege HUD summarizes lane structure state for both teams.
 - Existing backdoor protection, tower plates, super-minions, inhibitor respawn and core victory remain intact.
 - Cache version bumped to v396.
+
+
+## v397 black-canvas recovery
+
+Fixed a release-blocking runtime regression: `render()` called missing `drawJungleCampMarkers()` and `drawMonsters()` helpers, aborting the first world frame while DOM mobile controls remained visible over a dark canvas. Restored neutral monster rendering, added jungle camp leash/ownership markers, aligned runtime/system/cache markers to v397, removed duplicate v384 CSS loading, unified resource cache queries, and strengthened the Python validator to reject undefined draw/update helpers referenced by the main loop.
+
+
+## v398 constrained-preview launch recovery
+
+Short embedded previews can clip the full start configuration panel while still exposing mobile controls, producing an apparently dead dark battlefield before a match has begun. Added a centered `НАЧАТЬ БОЙ` fallback for coarse-pointer viewports below 600 px. It launches through the existing Play transaction, disappears immediately on launch or restored rendering, and does not duplicate match initialization. Cache and audit markers are v398.
+
+
+## v399 pre-match launch visibility fix
+
+The v398 fallback was immediately hidden by the initial pre-match `render()` call, before Play could be pressed. Visibility now changes only after the running animation loop begins or Play is activated. The short-preview media rule no longer depends on coarse-pointer reporting, which embedded mobile iframes may misreport.
+
+
+## v400 layout-viewport-independent launch
+
+Fresh screenshots confirm world rendering is restored, but Arena's clipped iframe still reports a layout viewport taller than its externally visible region, so the v399 max-height media rule did not expose Quick Start. The pre-match fallback is now viewport-independent and remains visible until the real running loop begins. The regular configuration panel remains available; the fallback is only a direct shortcut through the same Play handler.
+
+## v401 renderer recovery
+- Restored the lost renderer definitions (foliage, shade, charAnim, drawCharacter, drawHeroCharacter) that made every frame throw a ReferenceError (black canvas); added drawMonsterBody for jungle monsters.
+- The large minimap is no longer drawn on compact/touch UI.
+- tools/validate.py now fails if any of these renderer functions is missing.
+
+## v402 HUD polish
+- Siege lane summary bar moved to top-centre on desktop and hidden on compact/touch UI (it overlapped the hero card).
+- "ЦЕЛИ МАТЧА" panel: overlapping jungle/rivalry rows separated, panel grows for the jungle role, text limited to panel width.
+
+## v403 duel spawn fix
+- Duel/ranked duel spawned the hero at (820,1120) inside the collision margin of a rock, so the hero could barely move toward the opponent. Spawn moved to (900,1150) (initial spawn, round reset and tournament).
+
+## v404 spawn safety net
+- Audit of all 25 modes found units spawning inside rock collision (Dominion hero, bot 3 in Riftball/Eclipse). Added unstickUnit/unstickAll: during the first 1.5 s of every match any hero/rival/bot standing in an obstacle is moved to the nearest free point.
+
+## v405 death screen
+- The old per-HUD "last damage" list is no longer drawn under the death recap panel, so the two no longer overlap/duplicate on the death screen.
+
+## v406 label clamp
+- Jungle monster name labels are clamped to the visible screen area (they were cut off at the screen edge).
+- Tuning note: raising the Legend rival stats (hp 300 / dmg 24 / speed 200) moved the scripted-bot round win rate only 65%->63% (within noise), so the values were left unchanged.
+
+## v407 shop recovery
+- The shop had no COMPONENTS section, although every item needs components: items could not be bought at all and auto-buy / quick-buy silently failed. Restored the section (6 components with owned counters) and made auto-buy / quick-buy buy the needed component.
+- The siege lane bar is hidden in duel modes.
+- In Duel / Ranked Duel the +900 bonus gold could not be spent (the shop only worked next to the base, far from the arena). The shop and auto-buy now work anywhere in these modes while out of combat.
+
+## v408 mobile shop layout
+- Components section laid out as a full-width dark card grid (it was one light column in a single grid cell).
+- Category chips in the shop were squeezed to a 4px row on short landscape phones; they now keep a minimum height.
+- Audit: no other missing DOM ids or undefined functions found; full purchase/upgrade/sell flow verified in a headless run.
+
+## v409 result screen
+- The start/result screen was vertically centred with overflow: when the post-match report made it taller than the viewport, the PОБЕДА/ПОРАЖЕНИЕ title and the first report lines were above the scroll origin and unreachable (worst on short landscape phones). It now starts at the top and still centres when short.
+- The result screen now scrolls to the title after a match, and the match time can no longer show as negative.
+- Portrait phones: the start screen no longer overflows horizontally (hero art/copy were 512px/1048px wide on a 390px screen), the hero card caption is styled again, and the floating "НАЧАТЬ БОЙ" button sits at the bottom instead of covering the hero list.
+
+## v410 shop cards
+- Mobile shop: item cards no longer collapse in the fixed-height grid (BUY label overlapped descriptions); the shop scrolls instead.
+
+## v411 HUD
+- Compact HUD: status line gets a dark pill and " · " separators; objective banner moved below the score panel (no overlap).
+
+## v412
+- Desktop: objective banner placed below the siege strip so it no longer sits under the Arcana trial panel.
+
+## v412 mode setup
+- Modes that pre-destroy inhibitors no longer revive them on frame 1 (6x "Ингибитор восстановлен" spam, structures coming back); objective (desktop banner placement unchanged).
+
+## v413 desktop HUD
+- Desktop: team-order panel moved below the quest list; role-quest card and siege strip shifted down a few px to clear the score panel.
+- Desktop with mouse: virtual joystick hidden (WASD / right-click move remain).
+
+## v414 QA tooling
+- tools/qa: Playwright scripts used for the v400+ checks are now kept in the project (they were lost between sessions).
+
+## v415 portrait fix
+- Phones in portrait: "Continue vertically" button now really dismisses the rotate overlay (CSS specificity bug; the match was unplayable in portrait).
+
+## v416
+- Portrait phones: role-quest card moved below the team-order panel (they overlapped).
+
+## v417 QA
+- Verified: save/resume after reload in 7 modes; frame cost ~0.6 ms update + ~6.5 ms render (software raster). Bot AI experiments (earlier retreat, base regen, ability peel) showed no measurable gain and were not shipped.
+
+## v418 result screen (landscape phones)
+- The match summary (title + stats) was hidden by the landscape start-menu layout; it is now shown on the result screen (#start.result-screen).
+
+## v419
+- Result screen: hero grid and match options hidden on every screen size (they were clickable under the summary on desktop).
+
+## v420
+- Desktop menu: extra bottom padding so the sticky start button no longer covers the last block.
+
+## v438
+- `game.js` (730 KB, 1353 строки) разбит на 16 классических скриптов `js/00…15-*.js` без изменения кода: они делят общую глобальную область видимости и загружаются по порядку в index.html (конкатенация файлов побайтно совпадает с прежним game.js). Валидатор проверяет синтаксис каждого модуля, порядок и наличие в sw.js. Это не ES-модули: переменные по-прежнему глобальные. Скрипты не хойстятся между файлами, поэтому три вызова при загрузке пришлось подправить: `applyOptions()` перенесён в начало 07, а `renderCoachFocusOptions` и `roleCoachFocus` — в начало 06. Новые вызовы функций на верхнем уровне нужно ставить в файл, где эта функция объявлена или ниже. Проверено: валидатор, smoke 25 режимов × 2 героя (0 ошибок), сохранение/продолжение, раскладка магазина.
+
+## v438 difficulty in team modes
+- Difficulty (Новичок/Воин/Легенда) previously changed only the single red rival; in classic/blitz/aram the red bot heroes are now scaled: Новичок x0.88 hp / x0.9 dmg, Легенда x1.3 hp / x1.2 dmg.
+- Known: the blue team still wins most simulated classic matches even with red x1.6 (AFK-hero control: 5/6), so the structural cause of the red-side deficit is not bot stats and is still unexplained. Earlier notes calling the runs "Легенда" were wrong: the sims ran on the default Воин.
+
+## v438
+- Овертайм в classic/blitz/aram: с 20-й фазы эскалации (≈20-я минута) каждую минуту максимальная прочность башен падает на 20%; ниже 40 HP башня рушится. Симуляция с пассивным героем: башни исчезают к ~30-й минуте, затем нексус падает за ~10 минут (раньше матч не заканчивался). Первая версия (урон по текущему HP) не работала — башни регенерировали. Живой игрой не проверено.
+## v438
+- Исправление для превью в песочнице (iframe без разрешений, как в окне предпросмотра claude.ai): `navigator.getGamepads()` бросал SecurityError каждый кадр и ронял игровой цикл — теперь вызов обёрнут в try/catch. Если `localStorage`/`sessionStorage` недоступны, подключается хранилище в памяти. Проверено имитацией: заблокированы Gamepad, web storage, wakeLock, vibrate, fullscreen, orientation lock, service worker — матч запускается без ошибок игры.
+
+## v438
+- Окно «Вы повержены» на низких экранах (высота окна < 460 px, например превью в чате): компактная версия — до 2 источников урона, без подсказки, прижата к низу и не закрывает бой. На обычных экранах без изменений.
+
+## v438
+- «Легенда» сильнее: красные боты ×1.5 здоровья и ×1.3 урона (было ×1.3/×1.2; константа `hard` в `dm` в play.onclick, 07-menu-controls.js). Замер скриптовым героем на Oracle/Tempest/Warden, 9 матчей классики на «Легенде»: ×1.3 — в среднем 14 мин, 18 смертей героя, 23 убийства красных; ×1.5 — 20 мин, 23 смерти, 28 убийств; ×1.7/×1.4 — 25 мин, 29 смертей, 37 убийств. Побед красных не было ни в одном режиме (ИИ не умеет завершать матч), поэтому метрика — длительность и потери, а не винрейт. Скриптовый герой не заменяет человека; число — предположение для живой проверки.
+
+## v438
+- Овертайм завершает матч: фаза 20+ — башни слабеют (−20% макс. прочности за фазу, <40 HP рушатся); фаза 24+ — ингибиторы теряют 34% за фазу; фаза 28+ — нексус команды с меньшим числом целых башен и ингибиторов теряет 40% за фазу (ничья — проигрывают красные). Нексус сам восстанавливает ~160 HP/мин, поэтому слабее 40% не работает. Замер (пассивный герой, 4 матча): первая версия (v422) не заканчивала ни одного матча за 40 мин; теперь все 4 закончились на 27–32 минуте (2 раза красные взяли нексус сами, 2 раза сработал овертайм). Выпущена как v438; красный «штурм» вместо контроля дракона проверялся и не включён: он не дал победы.
+- Код: `overtimeCollapse()` в 11-mode-systems.js.
+
+## v438
+- «Быстрый старт»: при первом матче нового профиля (после обратного отсчёта) показывается карточка с управлением (разная для телефона и ПК); закрывается касанием или через 12 с и больше не появляется (`profile.quickStartSeen`). Файл `js/16-quickstart.js`. Звук, хит-стоп, искры, серии убийств и тряска уже были в игре и не менялись.
+
+## v438
+- Визуальная полировка (`js/14b-visual-polish.js` + правило в `v438.css`): световые пятна вокруг баз, башен, ингибиторов и героя (аддитивные спрайты, кэшируются); аддитивное свечение боевых эффектов (волны, вспышки, искры, лечение); виньетка; цветокоррекция холста через CSS-фильтр (насыщенность ×1.28, контраст ×1.07, яркость ×1.1). Всё отключается при низком качестве (`qualityScale<1`) и при «уменьшенной анимации».
+- Bloom (размытая копия кадра) написан, но выключен (`VFX_BLOOM=false`): копирование холста стоило ~18 мс/кадр в программном рендере. Замер: рендер ~5–7 мс/кадр, fps как у v428. На реальных устройствах не проверено.
+
+
