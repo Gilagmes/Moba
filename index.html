@@ -11,16 +11,16 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="style.css?v455" />
-  <link rel="stylesheet" href="v100.css?v455" />
-  <link rel="stylesheet" href="v142.css?v455" />
-  <link rel="stylesheet" href="v325.css?v455" />
-  <link rel="stylesheet" href="v337.css?v455" />
-  <link rel="stylesheet" href="v343.css?v455" />
-  <link rel="stylesheet" href="v388.css?v455" />
-  <link rel="stylesheet" href="v396.css?v455" />
-  <link rel="stylesheet" href="v384.css?v455" />
-  <link rel="stylesheet" href="v455.css?v455" />
+  <link rel="stylesheet" href="style.css?v465" />
+  <link rel="stylesheet" href="v100.css?v465" />
+  <link rel="stylesheet" href="v142.css?v465" />
+  <link rel="stylesheet" href="v325.css?v465" />
+  <link rel="stylesheet" href="v337.css?v465" />
+  <link rel="stylesheet" href="v343.css?v465" />
+  <link rel="stylesheet" href="v388.css?v465" />
+  <link rel="stylesheet" href="v396.css?v465" />
+  <link rel="stylesheet" href="v384.css?v465" />
+  <link rel="stylesheet" href="v465.css?v465" />
 </head>
 <body>
   <main id="game-shell">
@@ -105,7 +105,9 @@
       <label><input id="highContrast" type="checkbox"> Высокая контрастность целей</label>
       <label><input id="model3d" type="checkbox" checked> 3D-модели (WebGL)</label>
       <label><input id="persp" type="checkbox" checked> Перспективная 3D-камера</label>
-      <label>Размер моделей <select id="modelScale"><option value="100">Обычный</option><option value="120" selected>Крупнее</option><option value="140">Крупные</option></select></label>
+      <label><input id="vibrant" type="checkbox" checked> Яркая цветокоррекция мира</label>
+      <label><input id="agirl" type="checkbox" checked> Импортная 3D-модель для Фантома (CC-BY, Alina Berg)</label>
+      <label>Размер моделей <select id="modelScale"><option value="100">Обычный</option><option value="120">Крупнее</option><option value="140" selected>Крупные</option><option value="165">Огромные</option></select></label>
       <label>Угол камеры <select id="camTilt"><option value="48">Ниже (больше перспективы)</option><option value="56" selected>Стандарт</option><option value="64">Выше (ближе к виду сверху)</option></select></label>
       <label><input id="autoQuality" type="checkbox" checked> Автонастройка производительности</label>
       <label>Цветовой режим <select id="colorMode"><option value="normal">Обычный</option><option value="deuteranopia">Красный → оранжевый</option><option value="tritanopia">Синий → бирюзовый</option><option value="mono">Монохром + контуры</option></select></label>
@@ -150,26 +152,28 @@
     </div>
     <div id="toast" role="status" aria-live="polite"></div>
   </main>
-  <script src="js/00-boot-network-tutorial.js?v455"></script>
-  <script src="js/01-world-modes-state.js?v455"></script>
-  <script src="js/02-profile-saves.js?v455"></script>
-  <script src="js/03-achievements-daily-history.js?v455"></script>
-  <script src="js/04-audio-feedback-input.js?v455"></script>
-  <script src="js/05-shop-pause-spells.js?v455"></script>
-  <script src="js/06-heroes-runes.js?v455"></script>
-  <script src="js/07-menu-controls.js?v455"></script>
-  <script src="js/08-talents-director-structures.js?v455"></script>
-  <script src="js/09-combat-skills.js?v455"></script>
-  <script src="js/10-match-flow-ai.js?v455"></script>
-  <script src="js/11-mode-systems.js?v455"></script>
-  <script src="js/12-update-vision-map.js?v455"></script>
-  <script src="js/13-character-render.js?v455"></script>
-  <script src="js/14-entities-hud-render.js?v455"></script>
-  <script src="js/14b-visual-polish.js?v455"></script>
-  <script src="js/14c-gl3d.js?v455"></script>
-  <script src="js/14d-gl3d-models.js?v455"></script>
-  <script src="js/15-boot.js?v455"></script>
-  <script src="js/16-quickstart.js?v455"></script>
+  <script src="js/00-boot-network-tutorial.js?v465"></script>
+  <script src="js/01-world-modes-state.js?v465"></script>
+  <script src="js/02-profile-saves.js?v465"></script>
+  <script src="js/03-achievements-daily-history.js?v465"></script>
+  <script src="js/04-audio-feedback-input.js?v465"></script>
+  <script src="js/05-shop-pause-spells.js?v465"></script>
+  <script src="js/06-heroes-runes.js?v465"></script>
+  <script src="js/07-menu-controls.js?v465"></script>
+  <script src="js/08-talents-director-structures.js?v465"></script>
+  <script src="js/09-combat-skills.js?v465"></script>
+  <script src="js/10-match-flow-ai.js?v465"></script>
+  <script src="js/11-mode-systems.js?v465"></script>
+  <script src="js/12-update-vision-map.js?v465"></script>
+  <script src="js/13-character-render.js?v465"></script>
+  <script src="js/14-entities-hud-render.js?v465"></script>
+  <script src="js/14b-visual-polish.js?v465"></script>
+  <script src="js/14c-gl3d.js?v465"></script>
+  <script src="js/14d-gl3d-models.js?v465"></script>
+  <script src="js/14e-agirl-data.js?v465"></script>
+  <script src="js/14f-agirl.js?v465"></script>
+  <script src="js/15-boot.js?v465"></script>
+  <script src="js/16-quickstart.js?v465"></script>
   <script>
   (()=>{const data={guardian:{name:'СТРАЖ',role:'ВОИН · ВЫЖИВАЕМОСТЬ',copy:'Держит фронт, принимает удар и создаёт пространство для команды.',tags:['ТАНК','КОНТРОЛЬ','ФРОНТ'],art:'assets/guardian.webp'},phantom:{name:'ФАНТОМ',role:'УБИЙЦА · МОБИЛЬНОСТЬ',copy:'Врывается через боковой маршрут, быстро добивает и выходит из опасной зоны.',tags:['ВРЫВ','КРИТ','УКЛОНЕНИЕ'],art:'assets/phantom.webp'},oracle:{name:'ОРАКУЛ',role:'МАГ · ДАЛЬНИЙ УРОН',copy:'Контролирует пространство дальними заклинаниями и наказывает скучившихся врагов.',tags:['МАГ','ЗОНА','ДАЛЬНОСТЬ'],art:'assets/oracle.webp'},tempest:{name:'БУРЕВЕСТНИК',role:'СТРЕЛОК · ОБЛАСТЬ',copy:'Держит дистанцию, ускоряет темп боя и превращает группы целей в безопасную добычу.',tags:['CARRY','АОЕ','ТЕМП'],art:'assets/tempest.webp'},seraph:{name:'СЕРАФИМ',role:'ПОДДЕРЖКА · ЛЕЧЕНИЕ',copy:'Поддерживает фронт, лечит союзников и меняет исход долгих командных сражений.',tags:['SUPPORT','ХИЛ','СПАСЕНИЕ'],art:'assets/seraph.webp'},archon:{name:'АРХОНТ',role:'ВОИН · КОНТРОЛЬ ВРЕМЕНИ',copy:'Замедляет критические моменты и создаёт команде окно для решающего столкновения.',tags:['BRUISER','КОНТРОЛЬ','ULT'],art:'assets/archon.webp'},warden:{name:'ВЕКТОР',role:'ВОИН · ГРАВИТАЦИЯ',copy:'Сжимает пространство вокруг цели и удерживает противника там, где команде удобно сражаться.',tags:['ТАНК','ЗОНА','ГРАВИТАЦИЯ'],art:'assets/warden.webp'},forge:{name:'КУЗНЕЦ',role:'БОЕЦ · РУНЫ',copy:'Наращивает давление раскалёнными рунами и превращает узкие проходы в смертельные зоны.',tags:['FIGHTER','РУНЫ','ОСАДА'],art:'assets/forgeborn.webp'},lumen:{name:'ЛЮМЕН',role:'МАГ · ПРИЗМЫ',copy:'Расщепляет бой световыми линиями и наказывает врагов за неверное позиционирование.',tags:['МАГ','ПРИЗМЫ','BURST'],art:'assets/lumen.webp'}};
   const img=document.getElementById('startHeroArt'),name=document.getElementById('startHeroName'),role=document.getElementById('startHeroRole'),copy=document.getElementById('startHeroCopy'),stats=document.getElementById('startHeroStats');
@@ -178,6 +182,6 @@
   paint(document.querySelector('.hero-card.selected')?.dataset.hero||'guardian');
   })();
   </script>
-  <script>if('serviceWorker' in navigator)window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./sw.js?v455');reg.update();reg.addEventListener('updatefound',()=>{const worker=reg.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)showToast('Обновление загружено · применится после перезапуска')})})}catch{}});</script>
+  <script>if('serviceWorker' in navigator)window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./sw.js?v465');reg.update();reg.addEventListener('updatefound',()=>{const worker=reg.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)showToast('Обновление загружено · применится после перезапуска')})})}catch{}});</script>
 </body>
 </html>
