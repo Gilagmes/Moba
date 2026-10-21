@@ -1,6 +1,35 @@
-/* 3D character models (v455): authored humanoid rigs built from custom meshes (rounded boxes, pills, blades, gems, feathers, capes).
+/* 3D character models (v465): authored humanoid rigs built from custom meshes (rounded boxes, pills, blades, gems, feathers, capes).
    Each hero/class has its own silhouette. Falls back to the v430 primitive models on any error. */
 const G3_METAL = '#cfd8de', G3_DMETAL = '#59666f';
+/* v465: swept glowing blade streak in front of a swinging unit */
+function g3Slash(C) {
+    if (!C.swinging || C.lod || options.reducedMotion || C.sw < .08) return;
+    const al = Math.min(.75, C.sw * 1.3), ang = (C.p - .5) * -2.6, ol0 = G3.ol; G3.ol = 0; G3.mat = 0;
+    g3Push(); g3T(1, 0, 14); g3RZ(ang); g3RX(.35); g3P('feather', '#ffffff', 3, 0, 0, 26, 5.5, 1, 1, al * .8, 2); g3RZ(-.22); g3P('feather', C.acc, 3, 0, 0, 30, 9, 1, 1, al * .5, 2); g3Pop(); G3.ol = ol0;
+}
+/* v465: skill-cast flash — each hero has its own style */
+const G3_CASTSTY = { guardian: 'dome', forge: 'quake', phantom: 'cross', tempest: 'spiral', oracle: 'orbs', archon: 'orbs', lumen: 'orbs', seraph: 'halo', warden: 'halo' };
+/* v465: ultimate — big flash on top of the normal cast style */
+function g3UltFx(C, u) {
+    const ol0 = G3.ol, e = 1 - u, acc = C.acc; G3.ol = 0; G3.mat = 0; g3Push(); g3T(0, 0, .6);
+    const ring = (r, col, al, z) => { g3Push(); g3T(0, 0, z || 0); g3S(r, r, 1); g3D('ring', col, 1, Math.max(0, Math.min(.9, al)), 2); g3Pop(); };
+    ring(14 + e * 56, acc, u * .9); ring(8 + e * 36, '#fff', u * .7); ring(5 + e * 22, acc, u * .6, e * 14);
+    g3P('cyl6', acc, 0, 0, 0, 6 + u * 4, 6 + u * 4, 60 + e * 30, 1, u * .2, 2); g3P('cyl6', '#fff', 0, 0, 0, 1.6 + u * 1.4, 1.6 + u * 1.4, 70 + e * 30, 1, u * .3, 2);
+    for (let i = 0; i < 10; i++) { const a = i * .628 + time * 2.2, d = 14 + e * 38; g3P('sph', i % 2 ? '#fff' : acc, Math.cos(a) * d, Math.sin(a) * d, 4 + e * 55 + (i % 4) * 7, 2.6 + u * 2, 2.6 + u * 2, 2.6 + u * 2, 1, u * .9, 2); }
+    g3P('sph', '#fff', 0, 0, 16, 14 * u + 4, 14 * u + 4, 14 * u + 4, 1, u * u * .3, 2); g3Pop(); G3.ol = ol0;
+}
+function g3CastFx(C) {
+    const gs = G3.ys.get(C.u), ult = gs && gs.ultT !== undefined ? Math.max(0, 1 - (time - gs.ultT) / 1.1) : 0, c = C.cst; if ((!c && !ult) || C.lod || options.reducedMotion) return; if (ult) g3UltFx(C, ult); if (!c) return; const ol0 = G3.ol, st = G3_CASTSTY[C.key] || 'dome', acc = C.acc, e = 1 - c, R = 12 + e * 30; G3.ol = 0; G3.mat = 0;
+    g3Push(); g3T(0, 0, .6);
+    const ring = (r, col, al, z) => { g3Push(); g3T(0, 0, z || 0); g3S(r, r, 1); g3D('ring', col, 1, Math.max(0, Math.min(.9, al)), 2); g3Pop(); };
+    if (st === 'dome') { ring(R, acc, c * 1.1); ring(R * .55, '#fff', c * .7); g3P('cyl6', acc, 0, 0, 0, 5 + c * 3, 5 + c * 3, 28 + e * 24, 1, c * .38, 2); }
+    else if (st === 'quake') { ring(R * 1.2, acc, c); ring(R * .7, '#fff', c * .6); for (let i = 0; i < 6; i++) { const a = i * 1.047 + .3, d = 8 + e * 26; g3Push(); g3T(Math.cos(a) * d, Math.sin(a) * d, 0); g3RZ(a); g3P('cone4', acc, 0, 0, 0, 3.4, 3.4, 10 * c + 2, 1, .8 * c + .1, 2); g3Pop(); } }
+    else if (st === 'cross') { ring(R * .8, acc, c * .8); for (let i = 0; i < 2; i++) { g3Push(); g3T(0, 0, 12); g3RZ(i * 1.57 + .8 + e * 1.4); g3RX(.2); g3P('feather', '#fff', -17 - e * 8, 0, 0, 34 + e * 16, 3.6, 1, 1, c * .85, 2); g3P('feather', acc, -17 - e * 8, 0, 0, 34 + e * 16, 8, 1, 1, c * .45, 2); g3Pop(); } }
+    else if (st === 'spiral') { for (let i = 0; i < 3; i++) ring(R * (.5 + i * .22), i ? acc : '#fff', c * .8, e * 26 + i * 7); g3P('cyl6', acc, 0, 0, 0, 3, 3, 40 + e * 20, 1, c * .3, 2); }
+    else if (st === 'orbs') { ring(R * .8, acc, c * .7); for (let i = 0; i < 6; i++) { const a = i * 1.047 + time * 3, d = 10 + e * 6; g3P('sph', i % 2 ? '#fff' : acc, Math.cos(a) * d, Math.sin(a) * d, 4 + e * 34 + (i % 3) * 5, 2.4 + c * 1.6, 2.4 + c * 1.6, 2.4 + c * 1.6, 1, c * .9, 2); } g3P('sph', acc, 0, 0, 16, 9 * c + 4, 9 * c + 4, 9 * c + 4, 1, c * .25, 2); }
+    else if (st === 'halo') { ring(R * .9, acc, c * .7); g3P('sph', acc, 0, 0, 14, 12 + e * 12, 12 + e * 12, 12 + e * 12, 1, c * .22, 2); g3Push(); g3T(0, 0, 40); g3S(9 + e * 4, 9 + e * 4, 1); g3D('ring', '#fff', 1, c * .9, 2); g3Pop(); }
+    g3Pop(); G3.ol = ol0;
+}
 function g3Metal(fn) { G3.mat = 1; fn(); G3.mat = 0; }
 function g3Hold(ang, mode, fn) { g3Push(); g3RY(mode === 'fwd' ? 1.05 - ang * .4 : mode === 'flat' ? Math.PI / 2 - ang : -ang); fn(); g3Pop(); }
 function g3Limb(col, r, l1, l2, a1, a2, tip) {
@@ -129,6 +158,7 @@ function g3Model(u, cls, o, sx, sy, sc, dth) {
     K.setup(C);
     g3Id(sx, gy, 0, S * 1.62 * pop * over * dk * (cls === 'super' ? 1.18 : 1)); g3RZ(yaw); g3T(0, 0, bob);
     if (!lod) g3RY(mv * .1 + (swinging ? sw * .22 : 0) + C.lean); if (dth) g3RY(-dth * 1.3); if (cst) g3RY(cst * .18);
+    if (key === 'phantom' && G3.agOk && options.agirl !== false) { g3AgDraw(C); K.post && 0; return; }
     const tw = C.tw;
     // ---- legs / skirt ----
     if (!C.robe) { for (const sd of [-1, 1]) { g3Push(); g3T(0, sd * tw * .22, 10.2); const a = swing * sd; g3Limb(C.legCol, 1.55 * tw / 10, 5, 5, a, Math.max(0, -a) * .9 + .05, () => { g3P('sq', C.bootCol, 1.2, 0, -.3, 4.8, 3.2, 2.8); if (!lod) { G3.mat = C.armor ? 1 : 0; g3P('pill', C.armor ? '#8d9aa4' : shade(C.legCol, .15), 0, 0, 2.7, 3.6 * tw / 10, 3.6 * tw / 10, 4.6); G3.mat = 0; g3P('sq', C.bootCol, 2.8, 0, -.2, 1.6, 2.8, 1.8); } }); g3Pop(); } }
@@ -142,18 +172,23 @@ function g3Model(u, cls, o, sx, sy, sc, dth) {
         else { g3Push(); g3T(3, 3, 12.6); g3RY(.1 + Math.sin(time * 3 + s.seed) * .06 + mv * .3); g3S(2, 2.6, 7.5); g3D('cape', shade(acc, -.2), .25); g3Pop(); }
         g3P('gem6', acc, 3.9, 0, 12.5, 1.5, 1.5, 2, .9);
     }
-    G3.mat = 2; g3P('pill', skin, 0, 0, 21.5, 2.6, 2.6, 2.4);
+    G3.hair = hair; G3.mat = 2; g3P('pill', skin, 0, 0, 21.5, 2.6, 2.6, 2.4);
     // ---- head & face ----
     G3.mat = 2; g3P('sq2', skin, 0, 0, 27.6, 7.6, 8.2, 8); G3.mat = 0;
+    const ol0 = G3.ol; G3.ol = .45;
     G3.mat = 0; g3P('sq2', '#fff', 3.3, 2.1, 27.6, .9, 2.1, 2.7); g3P('sq2', '#fff', 3.3, -2.1, 27.6, .9, 2.1, 2.7);
-    g3P('sq2', C.eyeCol, 3.75, 2.1, 27.5, .7, 1.4, 2.2); g3P('sq2', C.eyeCol, 3.75, -2.1, 27.5, .7, 1.4, 2.2);
+    for (const sd of [-1, 1]) {            // anime eyes: dark upper lid, iris with gradient, pupil, two highlights
+        g3P('sq2', C.eyeCol, 3.75, sd * 2.1, 27.5, .8, 1.6, 2.5); g3P('sq2', shade(C.eyeCol, .4), 3.85, sd * 2.1, 26.6, .7, 1.25, 1.1); g3P('sq2', '#10131c', 3.95, sd * 2.1, 27.7, .6, .8, 1.5);
+        g3P('sq', '#171221', 3.7, sd * 2.1, 29.0, .5, 3.0, .32);
+    }
     if (!lod) {
-        g3P('sq2', '#fff', 4.05, 1.8, 28.3, .4, .6, .8, 1); g3P('sq2', '#fff', 4.05, -2.4, 28.3, .4, .6, .8, 1);
+        g3P('sq2', '#fff', 4.2, 1.7, 28.4, .4, .7, .95, 1); g3P('sq2', '#fff', 4.2, -2.5, 28.4, .4, .7, .95, 1); g3P('sq2', '#fff', 4.15, 2.5, 26.5, .3, .4, .45, 1); g3P('sq2', '#fff', 4.15, -1.7, 26.5, .3, .4, .45, 1);
         g3P('sq', shade(hair, -.2), 3.3, 2.2, 29.7, .6, 2.6, .6); g3P('sq', shade(hair, -.2), 3.3, -2.2, 29.7, .6, 2.6, .6);
         g3P('sq2', shade(skin, -.1), 3.9, 0, 26.2, 1, 1, 1); g3P('sq', '#8a4a4a', 3.7, 0, 24.9, .4, 2, .5);
         g3P('sq2', skin, 0, 4.1, 27.3, 1.3, 1, 2.2); g3P('sq2', skin, 0, -4.1, 27.3, 1.3, 1, 2.2);
         if (C.fem) for (const sd of [-1, 1]) { g3P('sq2', '#f09aa6', 3.4, sd * 3.3, 25.9, .5, 1.7, 1.1); g3P('sq', '#1a1220', 3.5, sd * 2.9, 29, .5, 2.4, .5); }
     }
+    G3.ol = ol0;
     // ---- arms ----
     const armBase = C.armBase !== undefined ? C.armBase : (swinging ? .55 - 2.7 * p : -.25 + Math.sin(time * 2 + s.seed) * .05 - Math.abs(swing) * .15);
     const armBend = C.armBend !== undefined ? C.armBend : (swinging ? -.25 : -.55);
@@ -168,7 +203,7 @@ function g3Model(u, cls, o, sx, sy, sc, dth) {
         });
         g3Pop();
     }
-    K.post(C); G3.mat = 0;
+    g3Slash(C); g3CastFx(C); K.post(C); G3.mat = 0;
 }
 function g3Char(u, cls, o, sx, sy, sc, dth) {
     if (cls === 'siege') return g3CharLegacy(u, cls, o, sx, sy, sc, dth);

@@ -1,5 +1,5 @@
-/* Visual polish layer (v455): world lighting, additive VFX, cheap bloom, vignette. All canvas 2D, cached sprites, skipped on low quality. */
-const VFX_ADDITIVE=new Set(['nova','enemyNova','botBlast','wardPulse','killBurst','heroNova','blade','spark','move','shield','dash','recall','heal','mastery','ready','cast','upgrade','wealth']);
+/* Visual polish layer (v465): world lighting, additive VFX, cheap bloom, vignette. All canvas 2D, cached sprites, skipped on low quality. */
+const VFX_ADDITIVE=new Set(['nova','enemyNova','botBlast','wardPulse','killBurst','heroNova','impact','blade','spark','move','shield','dash','recall','heal','mastery','ready','cast','upgrade','wealth']);
 const _glowSprites={};
 function glowSprite(color){let c=_glowSprites[color];if(c)return c;c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d'),r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,color+'cc');r.addColorStop(.35,color+'55');r.addColorStop(1,color+'00');g.fillStyle=r;g.fillRect(0,0,128,128);return _glowSprites[color]=c}
 function lightPool(x,y,radius,color,alpha){if(x+radius<cam.x||x-radius>cam.x+W||y+radius<cam.y||y-radius>cam.y+H)return;ctx.globalAlpha=alpha;ctx.drawImage(glowSprite(color),x-radius,y-radius,radius*2,radius*2)}
@@ -17,3 +17,16 @@ function drawBloom(){if(!VFX_BLOOM||qualityScale<1||options.reducedMotion||!opti
 let _vig=null,_vigKey='';
 function drawScreenPolish(){canvas.classList.toggle('vfx-grade',qualityScale>=1&&!options.reducedMotion);if(options.reducedMotion&&qualityScale<1)return;const key=W+'x'+H;if(_vigKey!==key){_vigKey=key;_vig=document.createElement('canvas');_vig.width=Math.max(2,Math.round(W/4));_vig.height=Math.max(2,Math.round(H/4));const g=_vig.getContext('2d'),r=g.createRadialGradient(_vig.width/2,_vig.height/2,Math.min(_vig.width,_vig.height)*.35,_vig.width/2,_vig.height/2,Math.hypot(_vig.width,_vig.height)*.58);r.addColorStop(0,'rgba(2,8,14,0)');r.addColorStop(1,'rgba(2,8,14,.55)');g.fillStyle=r;g.fillRect(0,0,_vig.width,_vig.height)}
  ctx.save();ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=true;ctx.drawImage(_vig,0,0,W,H);ctx.restore()}
+
+/* v465: impact burst — flash, shock ring and sparks at every damage hit */
+function drawImpact(p) {
+    const q = 1 - p.life / p.max, e = 1 - (1 - q) * (1 - q), R = (14 + 34 * e) * p.big, a = 1 - q;
+    ctx.save(); ctx.translate(p.x, p.y);
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, R * .9); g.addColorStop(0, 'rgba(255,255,255,' + (.95 * a) + ')'); g.addColorStop(.35, p.color); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalAlpha = a * .75; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, R * .9 * (1 - q * .4), 0, 6.283); ctx.fill();
+    ctx.globalAlpha = a; ctx.strokeStyle = p.color; ctx.lineWidth = 3.2 * a * p.big + .5; ctx.beginPath(); ctx.arc(0, 0, R * 1.15, 0, 6.283); ctx.stroke();
+    ctx.strokeStyle = '#fff'; ctx.lineCap = 'round'; ctx.lineWidth = 2.2 * a;
+    const n = p.big > 1.3 ? 10 : 7; ctx.beginPath();
+    for (let i = 0; i < n; i++) { const an = p.a + i * 6.283 / n + (i % 2) * .22, r0 = R * (.55 + e * .4), r1 = r0 + (10 + (i % 3) * 7) * p.big * (1 - q * .6); ctx.moveTo(Math.cos(an) * r0, Math.sin(an) * r0); ctx.lineTo(Math.cos(an) * r1, Math.sin(an) * r1); }
+    ctx.stroke(); ctx.restore();
+}

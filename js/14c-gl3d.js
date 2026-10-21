@@ -1,4 +1,4 @@
-/* 3D layer (v455): procedural low-poly cel-shaded WebGL models (heroes, minions, monsters, towers, inhibitors, nexus).
+/* 3D layer (v465): procedural low-poly cel-shaded WebGL models (heroes, minions, monsters, towers, inhibitors, nexus).
    No external libraries or assets. Map, HUD, effects stay 2D. Any failure -> automatic fallback to the 2D art. */
 const G3 = { act: false, tried: false, ok: false, gl: null, cv: null, W: 0, H: 0, M: new Float32Array(16), st: [], sp: 0, flash: 0, ol: 0, mat: 0, meshes: {}, col: new Map(), lod: false, n: 0, pool: [null, null, null], cnt: [0, 0, 0], ys: new WeakMap(), seen: new Map(), corpses: [], frame: 0 };
 const G3_CMAX = 2600, G3_K = 0.8;
@@ -14,19 +14,30 @@ if(uOP>.5){vec4 c2=pr(w.xyz+n*8.);vec2 d=(c2.xy/c2.w-c.xy/c.w)*uScr*.5;float l=l
 vN=n;vC=aC;vQ=aQ.yz;vZ=w.z;vH=uPR.x>.5?smoothstep(1250.,1650.,c.w)*.5:0.;gl_Position=c;}`;
 const G3_GVS = `attribute vec2 aG;varying vec2 vT;varying float vH;${G3_PR}
 void main(){vT=aG/uCam.xy;vec4 c=pr(vec3(aG,0.));vH=smoothstep(1250.,1650.,c.w)*.5;gl_Position=c;}`;
-const G3_GFS = `precision mediump float;varying vec2 vT;varying float vH;uniform sampler2D uTex;
-void main(){vec3 c=texture2D(uTex,vT).rgb;c=mix(c,vec3(.02,.07,.09),vH);gl_FragColor=vec4(c,1.);}`;
+const G3_GFS = `precision mediump float;varying vec2 vT;varying float vH;uniform sampler2D uTex;uniform float uGr;
+void main(){vec3 c=texture2D(uTex,vT).rgb;float l=dot(c,vec3(.3,.59,.11));
+c*=1.+uGr*.6*(1.-l)*smoothstep(.02,.16,l);c=mix(vec3(dot(c,vec3(.3,.59,.11))),c,1.+uGr*.32);c*=mix(vec3(1.),vec3(1.07,1.03,.93),uGr);
+c=mix(c,mix(vec3(.02,.07,.09),vec3(.12,.3,.34),uGr),vH);gl_FragColor=vec4(c,1.);}`;
 const G3_FS = `precision mediump float;varying vec3 vN;varying vec4 vC;varying vec2 vQ;varying float vZ;varying float vH;uniform mediump float uOP;
 void main(){vec4 uC=vC;if(uOP>.5){gl_FragColor=vec4(uC.rgb*.22*uC.a,uC.a);return;}
 vec3 n=normalize(vN);float mat=floor((vQ.x+.01)/4.);float em=vQ.x-mat*4.;
-if(mat>2.5){float f=pow(max(dot(n,normalize(vec3(0.,.5,.85))),0.),1.5);gl_FragColor=vec4(uC.rgb*uC.a*f*1.5,0.);return;}
-float d=dot(n,normalize(vec3(-.45,.5,.78)));
-float b=.56+.2*smoothstep(-.1,.08,d)+.24*smoothstep(.45,.62,d);
-float rim=pow(1.-max(dot(n,normalize(vec3(0.,.5,.85))),0.),3.)*.3;
-vec3 col=uC.rgb*b*vec3(1.03,1.,.97)+rim*vec3(.55,.75,1.)*.55+uC.rgb*max(n.z,0.)*.08;
-col*=mix(.72,1.,smoothstep(0.,16.,vZ));
-vec3 hv=normalize(normalize(vec3(-.45,.5,.78))+normalize(vec3(0.,.5,.85)));float spc=pow(max(dot(n,hv),0.),mat>1.5?10.:34.)*(mat>.5?(mat>1.5?.3:.8):0.);col+=spc*vec3(1.,.98,.92);
-col=mix(col,uC.rgb*(1.15+em*.5)+em*.12,min(1.,em));col=mix(col,vec3(1.),vQ.y);col=mix(vec3(dot(col,vec3(.3,.59,.11))),col,1.2);col=mix(col,vec3(.02,.07,.09),vH);
+if(mat>2.5&&mat<3.5){float f=pow(max(dot(n,normalize(vec3(0.,.5,.85))),0.),1.5);gl_FragColor=vec4(uC.rgb*uC.a*f*1.5,0.);return;}
+vec3 V=normalize(vec3(0.,.5,.85));float d=dot(n,normalize(vec3(-.45,.5,.78)));
+vec3 base=uC.rgb;
+vec3 tint=mat>3.5?vec3(.58,.55,.84):mat>1.5?vec3(.93,.68,.74):vec3(.6,.57,.84);
+vec3 sh=base*tint+vec3(.012,0.,.035);
+vec3 lit=base*vec3(1.07,1.03,.96);
+float b=smoothstep(.0,.07,d);
+vec3 col=mix(sh,lit,b);
+col*=mix(.84,1.,smoothstep(-.46,-.4,d));
+float rim=pow(1.-max(dot(n,V),0.),3.)*smoothstep(-.2,.3,-d+.2);
+col+=rim*vec3(.45,.75,1.)*.5*(.4+.6*b);
+col*=mix(.74,1.,smoothstep(0.,16.,vZ));
+if(mat>3.5){float st=smoothstep(.27,.31,n.z)*(1.-smoothstep(.39,.43,n.z))*smoothstep(.25,.55,dot(n,V));col=mix(col,mix(base,vec3(1.),.7),st*.85);}
+vec3 hv=normalize(normalize(vec3(-.45,.5,.78))+V);float sp=dot(n,hv);
+if(mat>.5&&mat<1.5)col+=smoothstep(.93,.95,sp)*.55*vec3(1.,.98,.92)+pow(max(sp,0.),20.)*.18;
+if(mat>1.5&&mat<2.5)col+=smoothstep(.96,.975,sp)*.2*vec3(1.,.95,.9);
+col=mix(col,base*(1.15+em*.5)+em*.12,min(1.,em));col=mix(col,vec3(1.),vQ.y);col=mix(vec3(dot(col,vec3(.3,.59,.11))),col,1.22);col=mix(col,vec3(.12,.3,.34),vH);
 gl_FragColor=vec4(col*uC.a,uC.a);}`;
 function g3Col(s) {
     let c = G3.col.get(s); if (c) return c;
@@ -68,7 +79,7 @@ function g3Build() {
     def('disc', () => { const seg = 22; for (let j = 0; j < seg; j++) { put([0, 0, 0], [0, 0, 1]); put([Math.cos((j + 1) / seg * 6.2832), Math.sin((j + 1) / seg * 6.2832), 0], [0, 0, 1]); put([Math.cos(j / seg * 6.2832), Math.sin(j / seg * 6.2832), 0], [0, 0, 1]); } });
     def('octa', () => { const px = [1, 0, 0], nx = [-1, 0, 0], py = [0, 1, 0], ny = [0, -1, 0], pz = [0, 0, 1], nz = [0, 0, -1], R = [0, 0, 0];
         for (const a of [px, nx])for (const b of [py, ny])for (const c of [pz, nz]) tri(a, b, c, R); });
-    // ---- v455 authored meshes: superellipsoids (rounded boxes / pills / soft heads), blade, gem, feather, cape, horn ----
+    // ---- v465 authored meshes: superellipsoids (rounded boxes / pills / soft heads), blade, gem, feather, cape, horn ----
     const sgp = (w, m) => { const c = Math.cos(w), sn = Math.sin(w); return [Math.sign(c) * Math.pow(Math.abs(c), m), Math.sign(sn) * Math.pow(Math.abs(sn), m)]; };
     const se = (name, e1, e2, nu, nv) => def(name, () => {
         const P = (i, j) => { const v = -Math.PI / 2 + i / nv * Math.PI, u = -Math.PI + j / nu * Math.PI * 2, a = sgp(v, e1), b = sgp(u, e2), a2 = sgp(v, 2 - e1), b2 = sgp(u, 2 - e2);
@@ -88,6 +99,7 @@ function g3Build() {
         for (let i = 0; i <= N; i++) { const t = i / N, p = c(t), T = nrm([.8 * t, 0, 1]), N2 = nrm(cross(T, [0, 1, 0])), rr = []; for (let j = 0; j < M; j++) { const a = j / M * 6.2832, cs = Math.cos(a), sn = Math.sin(a), rd = r(t) * .5;
             rr.push([[p[0] + rd * (cs * N2[0] + sn * 0), p[1] + rd * sn, p[2] + rd * (cs * N2[2])], nrm([cs * N2[0], sn, cs * N2[2]])]); } ring.push(rr); }
         for (let i = 0; i < N; i++) for (let j = 0; j < M; j++) { const k = (j + 1) % M, A = ring[i][j], B = ring[i + 1][j], C = ring[i + 1][k], D = ring[i][k]; trs(A[0], B[0], C[0], A[1], B[1], C[1]); trs(A[0], C[0], D[0], A[1], C[1], D[1]); } });
+    if (typeof G3_AG !== 'undefined' && typeof g3AgMeshes === 'function') g3AgMeshes(V, meshes);
     return { V: new Float32Array(V), meshes };
 }
 function g3Init() {
@@ -101,7 +113,7 @@ function g3Init() {
         if (!gl.getProgramParameter(pg, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pg));
         const pg2 = gl.createProgram(); gl.attachShader(pg2, sh(gl.VERTEX_SHADER, G3_GVS)); gl.attachShader(pg2, sh(gl.FRAGMENT_SHADER, G3_GFS)); gl.bindAttribLocation(pg2, 0, 'aG'); gl.linkProgram(pg2);
         if (!gl.getProgramParameter(pg2, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pg2));
-        G3.pg = pg; G3.pg2 = pg2; G3.ug = {}; for (const n of ['uCam', 'uScr', 'uPR', 'uTex']) G3.ug[n] = gl.getUniformLocation(pg2, n);
+        G3.pg = pg; G3.pg2 = pg2; G3.ug = {}; for (const n of ['uCam', 'uScr', 'uPR', 'uTex', 'uGr']) G3.ug[n] = gl.getUniformLocation(pg2, n);
         G3.gbuf = gl.createBuffer(); G3.tex = gl.createTexture();
         gl.useProgram(pg);
         const b = g3Build(), buf = gl.createBuffer(); G3.vbuf = buf; gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, b.V, gl.STATIC_DRAW);
@@ -132,7 +144,7 @@ function g3RY(a) { g3Rot(a, 2, 0, 1); }      // col2' = c*col2 + s*col0
 function g3D(mesh, col, em, alpha, layer) {
     layer = layer || 1; const n = G3.cnt[layer]; if (n >= G3_CMAX) return; G3.cnt[layer] = n + 1;
     const p = G3.pool[layer], o = n * 24, c = g3Col(col);
-    p.set(G3.M, o); p[o + 16] = c[0]; p[o + 17] = c[1]; p[o + 18] = c[2]; p[o + 19] = alpha === undefined ? 1 : alpha; p[o + 20] = G3.mid[mesh]; p[o + 21] = (em || 0) + 4 * ((layer === 2 && mesh === 'sph' && alpha !== undefined && alpha < .95) ? 3 : G3.mat); p[o + 22] = G3.flash; p[o + 23] = layer === 1 && !G3.lod ? G3.ol : 0;
+    p.set(G3.M, o); p[o + 16] = c[0]; p[o + 17] = c[1]; p[o + 18] = c[2]; p[o + 19] = alpha === undefined ? 1 : alpha; p[o + 20] = G3.mid[mesh]; p[o + 21] = (em || 0) + 4 * ((layer === 2 && mesh === 'sph' && alpha !== undefined && alpha < .95) ? 3 : (G3.mat === 0 && layer === 1 && col === G3.hair ? 4 : G3.mat)); p[o + 22] = G3.flash; p[o + 23] = layer === 1 && !G3.lod ? G3.ol : 0;
 }
 /* part: translate, scale, draw */
 function g3P(mesh, col, tx, ty, tz, sx, sy, sz, em, alpha, layer) { g3Push(); g3T(tx, ty, tz); g3S(sx, sy, sz); g3D(mesh, col, em, alpha, layer); g3Pop(); }
@@ -148,7 +160,7 @@ function gl3dBegin() {
     if (typeof options !== 'undefined' && options.model3d === false) return;
     if (!G3.tried) g3Init();
     if (!G3.ok) return;
-    G3.act = true; G3.lod = qualityScale < 1; G3.mat = 0;
+    G3.act = true; G3.lod = qualityScale < 1; G3.mat = 0; G3.hair = null;
 }
 function gl3dFlush(gw) {
     if (!G3.act) return;
@@ -158,7 +170,7 @@ function gl3dFlush(gw) {
     const cp = Math.cos(G3P.phi), sp = Math.sin(G3P.phi), vw = gw ? gw.vw : W, vh = gw ? gw.vh : H, pm = gw ? 1 : 0;
     if (gw) {                                                // ground: the whole 2D world rendered to a texture, drawn on a tilted plane
         gl.disable(gl.DEPTH_TEST); gl.disable(gl.BLEND); gl.disable(gl.CULL_FACE); gl.useProgram(G3.pg2); const g = G3.ug;
-        gl.uniform3f(g.uCam, vw, vh, 0); gl.uniform2f(g.uScr, W, H); gl.uniform4f(g.uPR, 1, G3P.D, cp, sp); gl.uniform1i(g.uTex, 0);
+        gl.uniform3f(g.uCam, vw, vh, 0); gl.uniform2f(g.uScr, W, H); gl.uniform4f(g.uPR, 1, G3P.D, cp, sp); gl.uniform1i(g.uTex, 0); gl.uniform1f(g.uGr, options.vibrant === false ? 0 : 1);
         gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, G3.tex);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
@@ -197,9 +209,9 @@ function gl3dFlush(gw) {
     gl.depthMask(false); gl.disable(gl.CULL_FACE); run(2, false);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = true; ctx.drawImage(G3.cv, 0, 0); ctx.restore();
 }
-/* ---- true perspective camera (v455) ---- */
+/* ---- true perspective camera (v465) ---- */
 const G3P = { D: 1250, phi: 0.98 };
-G3.persp = false; G3.ov = []; G3.ms = 1.2;
+G3.persp = false; G3.ov = []; G3.ms = 1.4;
 function g3S2G(sx, sy, force) {      // screen px -> ground px (coordinates of the old top-down screen)
     if (!G3.persp && !force) return [sx, sy];
     const cp = Math.cos(G3P.phi), sp = Math.sin(G3P.phi), D = G3P.D, X = sx - W / 2, yn = H / 2 - sy;
@@ -230,7 +242,7 @@ function g3WorldBegin() {
 function g3WorldEnd(st) { if (!st) return; ctx = st.ctx; W = st.W; H = st.H; dpr = st.dpr; cam.x = st.cx; cam.y = st.cy; }
 function g3Compose(st) { if (!st || !G3.act) return; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H); gl3dFlush(st); }
 if (typeof mouse !== 'undefined') Object.defineProperty(mouse, 'wx', { get() { return scrToWorld(mouse.x, mouse.y).x; } }), Object.defineProperty(mouse, 'wy', { get() { return scrToWorld(mouse.x, mouse.y).y; } });
-/* ---- upright overlay: text and bars drawn on the tilted ground are re-projected and drawn upright (v455) ---- */
+/* ---- upright overlay: text and bars drawn on the tilted ground are re-projected and drawn upright (v465) ---- */
 function g3Rec(o, x, y) {
     const st = G3.cur, c = G3.wx, tf = c.getTransform(), sc = st.s, px = (tf.a * x + tf.c * y + tf.e) / sc, py = (tf.b * x + tf.d * y + tf.f) / sc;
     o.gx = px - (st.vw - st.W) / 2; o.gy = py - (st.vh - st.H) / 2; o.k = Math.hypot(tf.a, tf.b) / sc; o.al = c.globalAlpha;
@@ -240,7 +252,7 @@ function g3Rec(o, x, y) {
 function g3HookText(c) {
     c.g3hook = true; const rec = (kind) => function (t, x, y) {
         if (!G3.persp || ctx !== c) return;
-        g3Rec({ kind, t: String(t), font: c.font, fill: kind === 'text' ? c.fillStyle : c.strokeStyle, align: c.textAlign, base: c.textBaseline, sc: c.shadowColor, sb: c.shadowBlur, lw: c.lineWidth }, x, y);
+        g3Rec({ kind, t: String(t), font: c.font, fill: kind === 'text' ? c.fillStyle : c.strokeStyle, align: c.textAlign, base: c.textBaseline, sc: c.shadowColor, sb: c.shadowBlur, lw: c.lineWidth, fl: !!G3.fl }, x, y);
     };
     c.fillText = rec('text'); c.strokeText = rec('stroke');
 }
@@ -251,13 +263,14 @@ function g3Bar(x, y, w, h, val, col) {
 function g3Overlay() {
     if (!G3.persp && !G3.ov.length) return; const ov = G3.ov, c = ctx; c.save(); c.setTransform(dpr, 0, 0, dpr, 0, 0);
     const placed = [];
-    for (const o of ov) {
+    for (let pass = 0; pass < 2; pass++) for (const o of ov) {
+        if (!!o.fl !== !!pass) continue;
         if (o.scr) { c.globalAlpha = o.al; c.save(); c.translate(o.x, o.y); c.rotate(o.a); c.fillStyle = o.fill; c.beginPath(); c.moveTo(15, 0); c.lineTo(-9, -8); c.lineTo(-9, 8); c.closePath(); c.fill(); c.fillStyle = '#fff'; c.font = '800 9px system-ui'; c.textAlign = 'center'; c.rotate(-o.a); c.fillText(o.t, 0, -13); c.restore(); continue; }
-        const p = g3G2S(o.gx, o.gy, 0), sx = p[0], k = p[2] * o.k, sy = p[1] - (16 + (G3.ms - 1) * 60) * k; if (sx < -200 || sx > W + 200 || sy < -100 || sy > H + 100) continue;
+        const p = g3G2S(o.gx, o.gy, 0), sx = p[0], k = p[2] * o.k, sy = p[1] - (16 + (G3.ms - 1) * 60 + (o.fl ? 34 : 0)) * k; if (sx < -200 || sx > W + 200 || sy < -100 || sy > H + 100) continue;
         c.globalAlpha = o.al;
         if (o.kind === 'bar') { const w = o.w * k, h = Math.max(3, o.h * k); c.fillStyle = '#071116cc'; c.fillRect(sx - w / 2, sy, w, h); c.fillStyle = o.fill; c.fillRect(sx - w / 2 + 1.5, sy + 1.5, (w - 3) * Math.max(0, o.val), h - 3); continue; }
         c.font = o.font.replace(/(\d+(?:\.\d+)?)px/, (m, n) => (n * Math.min(1.4, Math.max(.6, k))).toFixed(1) + 'px'); c.textAlign = o.align; c.textBaseline = o.base; c.shadowColor = o.sc; c.shadowBlur = o.sb;
-        if (o.kind === 'text') { const w = c.measureText(o.t).width, fh = parseFloat(c.font.match(/(\d+(?:\.\d+)?)px/)[1]) || 14, x0 = o.align === 'center' ? sx - w / 2 : o.align === 'right' || o.align === 'end' ? sx - w : sx; let yy = sy; for (let t = 0; t < 4; t++) { const hit = placed.find(r => x0 < r.x1 && x0 + w > r.x0 && yy - fh < r.y1 && yy > r.y0); if (!hit) break; yy = hit.y0 - 2; } placed.push({ x0, x1: x0 + w, y0: yy - fh, y1: yy }); if (yy !== sy) { c.fillStyle = o.fill; c.fillText(o.t, sx, yy); continue; } }
+        if (o.kind === 'text') { const w = c.measureText(o.t).width, fh = parseFloat(c.font.match(/(\d+(?:\.\d+)?)px/)[1]) || 14, x0 = o.align === 'center' ? sx - w / 2 : o.align === 'right' || o.align === 'end' ? sx - w : sx; let yy = sy; for (let t = 0; t < 4; t++) { const hit = placed.find(r => x0 - 4 < r.x1 && x0 + w + 4 > r.x0 && yy - fh - 4 < r.y1 && yy + 4 > r.y0); if (!hit) break; yy = hit.y0 - 5; } placed.push({ x0, x1: x0 + w, y0: yy - fh, y1: yy }); if (yy !== sy) { c.fillStyle = o.fill; c.fillText(o.t, sx, yy); continue; } }
         if (o.kind === 'stroke') { c.strokeStyle = o.fill; c.lineWidth = o.lw; c.strokeText(o.t, sx, sy); } else { c.fillStyle = o.fill; c.fillText(o.t, sx, sy); }
     }
     c.restore(); G3.ov.length = 0;
@@ -287,7 +300,7 @@ function g3Corpses() {          // collapse animation for units that died since 
 }
 function g3Cast(u) {          // cast pose: detect a cooldown jump on the unit's ability table
     const st = G3.ys.get(u); if (!st || !u.cd || typeof u.cd !== 'object') return 0;
-    let sum = 0; for (const k in u.cd) { const v = u.cd[k]; if (typeof v === 'number') sum += v; }
+    let sum = 0; const pc = st.cdR; for (const k in u.cd) { const v = u.cd[k]; if (typeof v === 'number') { sum += v; if (k === 'R') { if (pc !== undefined && v > pc + .8) st.ultT = time; st.cdR = v; } } }
     if (st.cdSum !== undefined && sum > st.cdSum + .8) st.castT = time; st.cdSum = sum;
     return st.castT !== undefined ? Math.max(0, 1 - (time - st.castT) / .5) : 0;
 }
@@ -562,7 +575,7 @@ function gl3dAmbient() {           // drifting fireflies and pollen in the air (
         if (x < -30 || x > W + 30 || y < -60 || y > H + 60) continue;
         const tw = .55 + .45 * Math.sin(time * 3 + h2 * 20), warm = h3 > .5;
         g3Id(x, y, 0, 1); g3Push(); g3S(5, 2.2, 1); g3D('disc', '#000', 0, .12, 0); g3Pop();
-        g3P('sph', warm ? '#ffe9a0' : '#9ff5d0', 0, 0, z, 4, 4, 4, 1, .55 + .45 * tw, 2);
+        const fc = warm ? '#ffd36a' : '#8cf0b0'; g3P('sph', fc, 0, 0, z, 11, 11, 11, 1, .10 + .10 * tw, 2); g3P('sph', fc, 0, 0, z, 5.2, 5.2, 5.2, 1, .30 + .3 * tw, 2); g3P('sph', '#fffbe6', 0, 0, z, 2.2, 2.2, 2.2, 1, .6 + .4 * tw, 2);
     }
 }
 function gl3dRuins(t) {
@@ -577,4 +590,5 @@ function gl3dRuins(t) {
 try { const m3 = document.querySelector('#model3d'); if (m3) m3.onchange = () => { options.model3d = m3.checked; applyOptions(); }; } catch (e) { }
 try { const pc = document.querySelector('#persp'); if (pc) pc.onchange = () => { options.persp = pc.checked; applyOptions(); }; } catch (e) { }
 try { G3P.phi = (+options.camTilt || 56) * Math.PI / 180; const ct = document.querySelector('#camTilt'); if (ct) ct.onchange = () => { options.camTilt = +ct.value; G3P.phi = options.camTilt * Math.PI / 180; applyOptions(); }; } catch (e) { }
-try { const ms = document.querySelector('#modelScale'); G3.ms = (+options.modelScale || 120) / 100; if (ms) ms.onchange = () => { options.modelScale = +ms.value; G3.ms = options.modelScale / 100; applyOptions(); }; } catch (e) { }
+try { const ms = document.querySelector('#modelScale'); G3.ms = (+options.modelScale || 140) / 100; if (ms) ms.onchange = () => { options.modelScale = +ms.value; G3.ms = options.modelScale / 100; applyOptions(); }; } catch (e) { }
+try { const vb = document.querySelector('#vibrant'); if (vb) vb.onchange = () => { options.vibrant = vb.checked; applyOptions(); }; } catch (e) { }
